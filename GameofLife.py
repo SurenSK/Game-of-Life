@@ -12,7 +12,13 @@ CELL_WIDTH, CELL_HEIGHT = 5, 5
 BUFFER_SIZE = 1
 N_X = math.floor((BOARD_WIDTH-BUFFER_SIZE)/(CELL_WIDTH+BUFFER_SIZE))
 N_Y = math.floor((BOARD_HEIGHT-BUFFER_SIZE)/(CELL_HEIGHT+BUFFER_SIZE))
+
+pygame.init()
+pygame.display.set_caption("Game of Life")
 screen = pygame.display.set_mode((BOARD_WIDTH, BOARD_HEIGHT))
+clock = pygame.time.Clock()
+
+n_board = [[random.randint(0, 1) for x in range(N_X)] for y in range(N_Y)]
 
 
 # Just cuts off at board edges
@@ -75,34 +81,19 @@ def draw_new_board(_board: list) -> None:
                               CELL_WIDTH, CELL_HEIGHT])
 
 
-pygame.init()
-pygame.display.set_caption("Game of Life")
-clock = pygame.time.Clock()
-
-n_board = [[random.randint(0, 1) for x in range(N_X)] for y in range(N_Y)]
-
 done = False
-i = 0
 avg_fps = 0
 while not done:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
-        if event.type == pygame.KEYDOWN:
-            draw_new_board(n_board)
-            pygame.display.flip()
-            n_board = new_board_toroidal_moore(n_board)
-#            n_board = new_board_flat_moore(board)
-#            board_print(n_board)
 
     screen.fill(GRID_COLOR)
-    board_print(n_board)
-#    draw_new_board(n_board)
-#    pygame.display.flip()
+    draw_new_board(n_board)
+    pygame.display.flip()
     avg_fps += clock.get_fps()
     avg_fps /= 2
-#    print(clock.get_fps())
-#    n_board = new_board_toroidal_moore(n_board)
+    n_board = new_board_toroidal_moore(n_board)
     clock.tick(60)
 
 print("Avg FPS", avg_fps)
