@@ -1,0 +1,26 @@
+# Glider
+BOARD_WIDTH, BOARD_HEIGHT = 121, 121
+CELL_WIDTH, CELL_HEIGHT = 5, 5
+BUFFER_SIZE = 1
+n_board = [
+    [False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False],
+    [False, False, True, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False],
+    [False, False, False, True, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False],
+    [False, True, True, True, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False],
+    [False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False],
+    [False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False],
+    [False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False],
+    [False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False],
+    [False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False],
+    [False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False],
+    [False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False],
+    [False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False],
+    [False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False],
+    [False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False],
+    [False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False],
+    [False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False],
+    [False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False],
+    [False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False],
+    [False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False],
+    [False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False],
+]
