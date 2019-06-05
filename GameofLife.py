@@ -7,7 +7,7 @@ RED, GREEN, BLUE = (255, 0, 0), (0, 255, 0), (0, 0, 255)
 GRID_COLOR = GRAY
 OFF_COLOR = WHITE
 ON_COLOR = BLACK
-BOARD_WIDTH, BOARD_HEIGHT = 961, 961
+BOARD_WIDTH, BOARD_HEIGHT = 61, 61
 CELL_WIDTH, CELL_HEIGHT = 5, 5
 BUFFER_SIZE = 1
 N_X = math.floor((BOARD_WIDTH-BUFFER_SIZE)/(CELL_WIDTH+BUFFER_SIZE))
@@ -30,6 +30,7 @@ def new_board_flat_moore(old_board: list) -> list:
 
 
 # Wrap-around / Toriodal Topography
+# ~20ms
 def new_board_toroidal_moore(old_board: list) -> list:
     new_board = [[0 for x in range(N_X)] for y in range(N_Y)]
     for x in range(N_X):
@@ -50,13 +51,18 @@ def new_board_toroidal_moore(old_board: list) -> list:
 
 
 def board_print(_board: list) -> None:
+    board_state = ""
     for x in range(N_X):
         for y in range(N_Y):
-            print(_board[x][y], sep='', end='')
-        print("")
-    print("-" * N_X)
+            board_state += str(_board[x][y])
+            # print(_board[x][y], sep='', end='')
+        board_state += "\r\n"
+        # print("")
+    board_state += "-" * N_X
+    print(board_state)
 
 
+# ~40ms
 def draw_new_board(_board: list) -> None:
     for x in range(N_X):
         for y in range(N_Y):
@@ -87,11 +93,9 @@ while not done:
 
     screen.fill(GRID_COLOR)
     draw_new_board(n_board)
-#    board_print(n_board)
-#    n_board = new_board_flat_moore(n_board)
-    n_board = new_board_toroidal_moore(n_board)
     pygame.display.flip()
     print(clock.get_fps())
-    clock.tick()
+    n_board = new_board_toroidal_moore(n_board)
+    clock.tick(60)
 
 print("Exiting...")
