@@ -16,7 +16,7 @@ screen = pygame.display.set_mode((BOARD_WIDTH, BOARD_HEIGHT))
 
 
 # Just cuts off at board edges
-def calc_new_board(old_board: list) -> list:
+def new_board_flat_moore(old_board: list) -> list:
     new_board = [[0 for x in range(N_X)] for y in range(N_Y)]
     for x in range(N_X):
         for y in range(N_Y):
@@ -30,7 +30,7 @@ def calc_new_board(old_board: list) -> list:
 
 
 # Wrap-around / Toriodal Topography
-def calc_new_board_torus(old_board: list) -> list:
+def new_board_toroidal_moore(old_board: list) -> list:
     new_board = [[0 for x in range(N_X)] for y in range(N_Y)]
     for x in range(N_X):
         for y in range(N_Y):
@@ -81,16 +81,16 @@ while not done:
         if event.type == pygame.KEYDOWN:
             draw_new_board(n_board)
             pygame.display.flip()
-            n_board = calc_new_board(n_board)
-#            board = calc_new_board(board)
-#            board_print(board)
+            n_board = new_board_toroidal_moore(n_board)
+#            n_board = new_board_flat_moore(board)
+#            board_print(n_board)
 
     screen.fill(GRID_COLOR)
-#    board_print(board)
     draw_new_board(n_board)
+#    board_print(n_board)
+#    n_board = new_board_flat_moore(n_board)
+    n_board = new_board_toroidal_moore(n_board)
     pygame.display.flip()
-#    n_board = calc_new_board(n_board)
-    n_board = calc_new_board_torus(n_board)
     print(clock.get_fps())
     clock.tick()
 
