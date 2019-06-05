@@ -18,7 +18,7 @@ pygame.display.set_caption("Game of Life")
 screen = pygame.display.set_mode((BOARD_WIDTH, BOARD_HEIGHT))
 clock = pygame.time.Clock()
 
-n_board = [[random.randint(0, 1) for x in range(N_X)] for y in range(N_Y)]
+n_board = [[random.randint(0, 1) == 1 for x in range(N_X)] for y in range(N_Y)]
 
 
 # ~0ms to concatenate & print once for 961x961 board w/ 5x5 cell w/ 1 buffer
@@ -53,7 +53,7 @@ def new_board_flat_moore(old_board: list) -> list:
 # Wrap-around / Toriodal Topography
 # ~20ms for 961x961 board w/ 5x5 cell w/ 1 buffer
 def new_board_toroidal_moore(old_board: list) -> list:
-    new_board = [[0 for x in range(N_X)] for y in range(N_Y)]
+    new_board = [[False for x in range(N_X)] for y in range(N_Y)]
     for x in range(N_X):
         for y in range(N_Y):
             pos_x = (x + 1) % N_X
@@ -63,11 +63,15 @@ def new_board_toroidal_moore(old_board: list) -> list:
             n_neighbors = old_board[x][neg_y] + old_board[x][pos_y] + \
                 old_board[neg_x][neg_y] + old_board[neg_x][y] + old_board[neg_x][pos_y] + \
                 old_board[pos_x][neg_y] + old_board[pos_x][y] + old_board[pos_x][pos_y]
-            if old_board[x][y] == 0:
-                if n_neighbors == 3:
-                    new_board[x][y] = 1
-            elif n_neighbors == 2 or n_neighbors == 3:
-                new_board[x][y] = 1
+
+            if n_neighbors > 3:
+                continue
+            elif n_neighbors < 2:
+                continue
+            elif n_neighbors == 3:
+                new_board[x][y] = True
+            elif old_board[x][y] is True:
+                new_board[x][y] = True
     return new_board
 
 
@@ -75,7 +79,7 @@ def new_board_toroidal_moore(old_board: list) -> list:
 def draw_new_board(_board: list) -> None:
     for x in range(N_X):
         for y in range(N_Y):
-            pygame.draw.rect(screen, (ON_COLOR, OFF_COLOR)[n_board[y][x] == 0],
+            pygame.draw.rect(screen, (ON_COLOR, OFF_COLOR)[n_board[y][x] is False],
                              [BUFFER_SIZE + (BUFFER_SIZE + CELL_WIDTH) * x,
                               BUFFER_SIZE + (BUFFER_SIZE + CELL_HEIGHT) * y,
                               CELL_WIDTH, CELL_HEIGHT])
