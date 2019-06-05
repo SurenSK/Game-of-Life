@@ -54,7 +54,9 @@ def simulate_flat_moore(old_board: list) -> list:
 
 
 # Wrap-around / Toriodal Topography
-# ~2ms for 961x961 board w/ 5x5 cell w/ 1 buffer
+# ~17-22ms for 961x961 board w/ 5x5 cell w/ 1 buffer
+# ~22ms at start when a full half of the cells are on
+# ~17ms after ~1000 iterations or 15secs
 def simulate_toroidal_moore(old_board: list) -> list:
     new_board = [[False for x in range(N_X)] for y in range(N_Y)]
     for x in range(N_X):
@@ -68,9 +70,9 @@ def simulate_toroidal_moore(old_board: list) -> list:
                 old_board[neg_x][neg_y] + old_board[neg_x][y] + old_board[neg_x][pos_y] + \
                 old_board[pos_x][neg_y] + old_board[pos_x][y] + old_board[pos_x][pos_y]
 
-            if n_neighbors > 3:
+            if n_neighbors < 2:
                 continue
-            elif n_neighbors < 2:
+            elif n_neighbors > 3:
                 continue
             elif n_neighbors == 3:
                 new_board[x][y] = True
