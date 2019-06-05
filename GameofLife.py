@@ -76,8 +76,7 @@ def simulate_toroidal_moore(old_board: list) -> list:
                 continue
             elif n_neighbors == 3:
                 new_board[x][y] = True
-                if old_board[x][y] is False:
-                    pygame.draw.rect(screen, ON_COLOR, [col_x, BUFFER_SIZE + (TOT_CELL_H * y), CELL_WIDTH, CELL_HEIGHT])
+                pygame.draw.rect(screen, ON_COLOR, [col_x, BUFFER_SIZE + (TOT_CELL_H * y), CELL_WIDTH, CELL_HEIGHT])
             elif old_board[x][y] is True:
                 new_board[x][y] = True
                 pygame.draw.rect(screen, ON_COLOR, [col_x, BUFFER_SIZE + (TOT_CELL_H * y), CELL_WIDTH, CELL_HEIGHT])
