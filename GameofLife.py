@@ -36,18 +36,16 @@ def calc_new_board_torus(old_board: list) -> list:
         for y in range(N_Y):
             pos_x = (x + 1) % N_X
             pos_y = (y + 1) % N_Y
-            neighbors = [
-                old_board[x - 1][y - 1],
-                old_board[x - 1][y],
-                old_board[x - 1][pos_y],
-                old_board[x][y - 1],
-                old_board[x][pos_y],
-                old_board[pos_x][y - 1],
-                old_board[pos_x][y],
-                old_board[pos_x][pos_y],
-            ]
-            n_neighbors = sum(neighbors) * (1, -1)[old_board[x][y] == 0]
-            new_board[x][y] = 1 if n_neighbors == -3 or n_neighbors == 2 or n_neighbors == 3 else 0
+            n_neighbors = old_board[x][y - 1] + old_board[x][pos_y] + \
+                old_board[x - 1][y - 1] + old_board[x - 1][y] + old_board[x - 1][pos_y] + \
+                old_board[pos_x][y - 1] + old_board[pos_x][y] + old_board[pos_x][pos_y]
+            # n_neighbors *= (1, -1)[old_board[x][y] == 0]
+            # new_board[x][y] = 1 if n_neighbors == -3 or n_neighbors == 2 or n_neighbors == 3 else 0
+            if old_board[x][y] == 0:
+                if n_neighbors == 3:
+                    new_board[x][y] = 1
+            elif n_neighbors == 2 or n_neighbors == 3:
+                new_board[x][y] = 1
     return new_board
 
 
@@ -93,7 +91,7 @@ while not done:
     pygame.display.flip()
 #    n_board = calc_new_board(n_board)
     n_board = calc_new_board_torus(n_board)
-#    print(clock.get_fps())
-    clock.tick(60)
+    print(clock.get_fps())
+    clock.tick()
 
 print("Exiting...")
