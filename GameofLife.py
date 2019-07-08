@@ -9,9 +9,11 @@ RED, GREEN, BLUE = (255, 0, 0), (0, 255, 0), (0, 0, 255)
 GRID_COLOR = GRAY
 OFF_COLOR = WHITE
 ON_COLOR = BLACK
-BOARD_WIDTH, BOARD_HEIGHT = 961, 961
-CELL_WIDTH, CELL_HEIGHT = 5, 5
-BUFFER_SIZE = 1
+#BOARD_WIDTH, BOARD_HEIGHT = 961, 961
+BOARD_WIDTH, BOARD_HEIGHT = 1920, 1080
+CELL_WIDTH, CELL_HEIGHT = 1, 1
+#CELL_WIDTH, CELL_HEIGHT = 5, 5
+BUFFER_SIZE = 0
 N_X = math.floor((BOARD_WIDTH-BUFFER_SIZE)/(CELL_WIDTH+BUFFER_SIZE))
 N_Y = math.floor((BOARD_HEIGHT-BUFFER_SIZE)/(CELL_HEIGHT+BUFFER_SIZE))
 TOT_CELL_W = BUFFER_SIZE + CELL_WIDTH
@@ -24,7 +26,8 @@ clock = pygame.time.Clock()
 
 board = [[random.randint(0, 1) == 1 for x in range(N_X)] for y in range(N_Y)]
 
-a_cell = pygame.image.load("active_cell.png").convert()
+# a_cell = pygame.image.load("active_cell.png").convert()
+a_cell = pygame.image.load("active_cell_min.png").convert()
 board_numpy = np.random.choice(a=[0, 1], size=(N_X, N_Y))
 n_neighbors = np.empty(shape=(N_X, N_Y), dtype=np.dtype(np.int8))
 kernel = np.array([
@@ -34,9 +37,9 @@ kernel = np.array([
 ])
 
 
-# ~0ms to concatenate & print once for 961x961 board w/ 5x5 cell w/ 1 buffer
-# ~66ms to print each character separately for 961x961 board w/ 5x5 cell w/ 1 buffer
 def board_print(_board: list) -> None:
+    # ~0ms to concatenate & print once for 961x961 board w/ 5x5 cell w/ 1 buffer
+    # ~66ms to print each character separately for 961x961 board w/ 5x5 cell w/ 1 buffer
     board_state = ""
     for x in range(N_X):
         for y in range(N_Y):
@@ -49,8 +52,8 @@ def board_print(_board: list) -> None:
     print(board_state)
 
 
-# Just cuts off at board edges
 def simulate_flat_moore(old_board: list) -> list:
+    # Just cuts off at board edges
     new_board = [[0 for x in range(N_X)] for y in range(N_Y)]
     for x in range(N_X):
         for y in range(N_Y):
@@ -58,16 +61,13 @@ def simulate_flat_moore(old_board: list) -> list:
             [[neighbors.append(old_board[xx][yy]) if (not(xx == x and yy == y)) else None
               for xx in range(max(x-1, 0), min(x+2, N_X))]
              for yy in range(max(y-1, 0), min(y+2, N_Y))]
-            n_neighbors = sum(neighbors) * (1, -1)[old_board[x][y] == 0]
+            n = sum(neighbors) * (1, -1)[old_board[x][y] == 0]
             new_board[x][y] = 1 if n_neighbors == -3 or n_neighbors == 2 or n_neighbors == 3 else 0
     return new_board
 
 
-# Wrap-around / Toriodal Topography
-# ~17-22ms for 961x961 board w/ 5x5 cell w/ 1 buffer
-# ~22ms at start when a full half of the cells are on
-# ~17ms after ~1000 iterations or 15secs
 def simulate_toroidal_moore(old_board: list) -> list:
+    # Wrap-around / Toriodal Topography
     new_board = [[False for var in range(N_X)] for y in range(N_Y)]
     for x in range(N_X):
         col_x = BUFFER_SIZE + (TOT_CELL_W * x)
@@ -86,43 +86,40 @@ def simulate_toroidal_moore(old_board: list) -> list:
                 continue
             elif active_neighbors == 3:
                 new_board[x][y] = True
-                # pygame.draw.rect(screen, ON_COLOR, [col_x, BUFFER_SIZE + (TOT_CELL_H * y), CELL_WIDTH, CELL_HEIGHT])
-                screen.blit(a_cell, (BUFFER_SIZE + (TOT_CELL_W * x), BUFFER_SIZE + (TOT_CELL_H * y)))
+                screen.blit(a_cell, (col_x, BUFFER_SIZE + (TOT_CELL_H * y)))
             elif old_board[x][y] is True:
                 new_board[x][y] = True
-                # pygame.draw.rect(screen, ON_COLOR, [col_x, BUFFER_SIZE + (TOT_CELL_H * y), CELL_WIDTH, CELL_HEIGHT])
-                screen.blit(a_cell, (BUFFER_SIZE + (TOT_CELL_W * x), BUFFER_SIZE + (TOT_CELL_H * y)))
+                screen.blit(a_cell, (col_x, BUFFER_SIZE + (TOT_CELL_H * y)))
     return new_board
 
 
 def numpy_toroidal_moore():
     global n_neighbors, board_numpy
     n_neighbors = signal.convolve2d(board_numpy, kernel, mode='same', boundary='wrap')
-    i_set_F = (board_numpy == 1) & ((n_neighbors < 2) | (n_neighbors > 3))
-    i_set_T = (board_numpy == 0) & (n_neighbors == 3)
-    board_numpy[i_set_F] = 0
-    board_numpy[i_set_T] = 1
-    for (x, y) in np.argwhere(board_numpy == 1):
-        screen.blit(a_cell, (BUFFER_SIZE + (TOT_CELL_W * x), BUFFER_SIZE + (TOT_CELL_H * y)))
+    board_numpy[n_neighbors != 2] = 0
+    board_numpy[n_neighbors == 3] = 1
 
 
 done = False
-avg_fps = 0
+tot_fps = 0
 n_frames = 0
+tot_frames = 1000
 while not done:
-    done = n_frames == 1000
+    done = n_frames == tot_frames
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
 
     screen.fill(OFF_COLOR)
-    # numpy_toroidal_moore()
-    board = simulate_toroidal_moore(board)
+    numpy_toroidal_moore()
+    # for (x, y) in np.argwhere(board_numpy == 1):
+    #    screen.blit(a_cell, (BUFFER_SIZE + (TOT_CELL_W * x), BUFFER_SIZE + (TOT_CELL_H * y)))
     pygame.display.flip()
-    avg_fps += clock.get_fps()
+    tot_fps += clock.get_fps()
     n_frames += 1
     print(clock.get_fps())
     clock.tick()
 
-print("Avg FPS", avg_fps / n_frames)
+print("Avg FPS", tot_fps / tot_frames)
+print("RunTime", (tot_frames*tot_frames) / tot_fps)
 print("Exiting...")
