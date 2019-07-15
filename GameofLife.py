@@ -8,8 +8,8 @@ from scipy import signal
 BLACK, GRAY, WHITE = (0, 0, 0), (128, 128, 128), (255, 255, 255)
 RED, GREEN, BLUE = (255, 0, 0), (0, 255, 0), (0, 0, 255)
 GRID_COLOR = GRAY
-OFF_COLOR = WHITE
-ON_COLOR = BLACK
+OFF_COLOR = BLACK
+ON_COLOR = WHITE
 BOARD_W, BOARD_H = 1920, 1080
 CELL_W, CELL_H, BUFFER = 1, 1, 0
 # BOARD_W, BOARD_H = 961, 961
@@ -21,8 +21,10 @@ N_Y = math.floor((BOARD_H - BUFFER) / (CELL_H + BUFFER))
 
 pygame.init()
 pygame.display.set_caption("Game of Life")
-screen = pygame.display.set_mode((BOARD_W, BOARD_H))
+screen = pygame.display.set_mode((BOARD_W, BOARD_H), depth=8)
+pygame.display.set_palette([(0, 0, 0)]+[(255, 255, 255) for x in range(1, 255)])
 clock = pygame.time.Clock()
+img = pygame.Surface(screen.get_size())
 
 # a_cell = pygame.image.load("active_cell.png").convert()
 a_cell = pygame.image.load("active_cell_min.png").convert()
@@ -102,10 +104,7 @@ def numpy_toroidal_moore():
 
 
 def draw_board():
-    screen.fill(OFF_COLOR)
-    for (x, y) in np.argwhere(board_numpy == 1):
-        # screen.blit(a_cell, (BUFFER + ((BUFFER + CELL_W) * x), BUFFER + ((BUFFER + CELL_H) * y)))
-        screen.blit(a_cell, TILE_COORDS[x][y])
+    pygame.surfarray.blit_array(screen, board_numpy)
     pygame.display.flip()
 
 
@@ -117,7 +116,7 @@ def status_print(c_frame_n: int, frequency: int) -> None:
 
 done = False
 frame_n = 0
-required_frames = 100
+required_frames = 1000
 
 print("\nStarting clock...")
 time_start = time.time()
@@ -128,9 +127,9 @@ while not done:
         if event.type == pygame.QUIT:
             done = True
 
-    numpy_toroidal_moore()
+    # numpy_toroidal_moore()
     draw_board()
-    status_print(frame_n, 25)
+    status_print(frame_n, 100)
     clock.tick()
 
 time_end = time.time()
