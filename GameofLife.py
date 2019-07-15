@@ -4,6 +4,7 @@ import math
 import time
 import numpy as np
 from scipy import signal
+from scipy import ndimage
 
 BLACK, GRAY, WHITE = (0, 0, 0), (128, 128, 128), (255, 255, 255)
 RED, GREEN, BLUE = (255, 0, 0), (0, 255, 0), (0, 0, 255)
@@ -29,6 +30,7 @@ a_cell = pygame.image.load("active_cell_min.png").convert()
 
 TILE_COORDS = [[(BUFFER+((BUFFER+CELL_W) * x), BUFFER+((BUFFER+CELL_H) * y)) for y in range(N_Y)] for x in range(N_X)]
 board = [[random.randint(0, 1) == 1 for x in range(N_X)] for y in range(N_Y)]
+
 board_numpy = np.random.choice(a=[0, 1], size=(N_X, N_Y))
 n_neighbors = np.zeros(shape=(N_X, N_Y), dtype=np.dtype(np.int8))
 kernel = np.array([
@@ -96,7 +98,10 @@ def simulate_toroidal_moore(old_board: list) -> list:
 
 def numpy_toroidal_moore():
     global n_neighbors, board_numpy
-    n_neighbors = signal.convolve2d(board_numpy, kernel, mode='same', boundary='wrap')
+    # n_neighbors = signal.convolve2d(board_numpy, kernel, mode='same', boundary='wrap')
+
+    kernel_h = np.array([1, 1, 1])
+    n_neighbors = ndimage.convolve1d(ndimage.convolve1d(board_numpy, kernel_h, axis=0, mode="wrap"), kernel_h, axis=1, mode="wrap") - board_numpy
     board_numpy[n_neighbors != 2] = 0
     board_numpy[n_neighbors == 3] = 1
 
@@ -122,12 +127,11 @@ while not done:
     frame_n += 1
     done = frame_n == required_frames
     for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            done = True
+            done = True if event.type == pygame.QUIT else False
 
     numpy_toroidal_moore()
     draw_board()
-    status_print(frame_n, 100)
+    # status_print(frame_n, 100)
     clock.tick()
 
 time_end = time.time()
