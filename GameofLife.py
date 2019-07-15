@@ -8,21 +8,19 @@ from scipy import signal
 BLACK, GRAY, WHITE = (0, 0, 0), (128, 128, 128), (255, 255, 255)
 RED, GREEN, BLUE = (255, 0, 0), (0, 255, 0), (0, 0, 255)
 GRID_COLOR = GRAY
-OFF_COLOR = BLACK
-ON_COLOR = WHITE
+OFF_COLOR = WHITE
+ON_COLOR = BLACK
 BOARD_W, BOARD_H = 1920, 1080
 CELL_W, CELL_H, BUFFER = 1, 1, 0
 # BOARD_W, BOARD_H = 961, 961
 # CELL_W, CELL_H, BUFFER = 5, 5, 1
-TOT_CELL_W = BUFFER + CELL_W
-TOT_CELL_H = BUFFER + CELL_H
 N_X = math.floor((BOARD_W - BUFFER) / (CELL_W + BUFFER))
 N_Y = math.floor((BOARD_H - BUFFER) / (CELL_H + BUFFER))
 
 pygame.init()
 pygame.display.set_caption("Game of Life")
 screen = pygame.display.set_mode((BOARD_W, BOARD_H), depth=8)
-pygame.display.set_palette([(0, 0, 0)]+[(255, 255, 255) for x in range(1, 255)])
+pygame.display.set_palette([OFF_COLOR]+[ON_COLOR])
 clock = pygame.time.Clock()
 img = pygame.Surface(screen.get_size())
 
@@ -73,7 +71,7 @@ def simulate_toroidal_moore(old_board: list) -> list:
     # Wrap-around / Toriodal Topography
     new_board = [[False for var in range(N_X)] for y in range(N_Y)]
     for x in range(N_X):
-        col_x = BUFFER + (TOT_CELL_W * x)
+        col_x = BUFFER + ((BUFFER + CELL_W) * x)
         neg_x = x - 1
         pos_x = (x + 1) % N_X
         for y in range(N_Y):
@@ -89,18 +87,18 @@ def simulate_toroidal_moore(old_board: list) -> list:
                 continue
             elif active_neighbors == 3:
                 new_board[x][y] = True
-                screen.blit(a_cell, (col_x, BUFFER + (TOT_CELL_H * y)))
+                screen.blit(a_cell, (col_x, BUFFER + ((BUFFER + CELL_H) * y)))
             elif old_board[x][y] is True:
                 new_board[x][y] = True
-                screen.blit(a_cell, (col_x, BUFFER + (TOT_CELL_H * y)))
+                screen.blit(a_cell, (col_x, BUFFER + ((BUFFER + CELL_H) * y)))
     return new_board
 
 
 def numpy_toroidal_moore():
     global n_neighbors, board_numpy
-    # n_neighbors = signal.convolve2d(board_numpy, kernel, mode='same', boundary='wrap')
-    # board_numpy[n_neighbors != 2] = 0
-    # board_numpy[n_neighbors == 3] = 1
+    n_neighbors = signal.convolve2d(board_numpy, kernel, mode='same', boundary='wrap')
+    board_numpy[n_neighbors != 2] = 0
+    board_numpy[n_neighbors == 3] = 1
 
 
 def draw_board():
@@ -127,14 +125,14 @@ while not done:
         if event.type == pygame.QUIT:
             done = True
 
-    # numpy_toroidal_moore()
+    numpy_toroidal_moore()
     draw_board()
     status_print(frame_n, 100)
     clock.tick()
 
 time_end = time.time()
 print("Stopped clock...\n")
-
 print("RunTime ", (time_end - time_start))
 print("#Frames ", frame_n)
-print("Exiting...")
+print("ms per frame ", 1000 * (time_end - time_start) / frame_n)
+print("\nExiting...")
