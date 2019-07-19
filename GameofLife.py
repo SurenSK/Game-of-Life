@@ -13,7 +13,7 @@ BLACK, GRAY, WHITE = (0, 0, 0), (128, 128, 128), (255, 255, 255)
 ON_COLOR = BLACK
 OFF_COLOR = WHITE
 BOARD_W, BOARD_H = 1920, 1080
-RESOLUTION_SCALE = 1
+SCALE = 1
 
 pygame.init()
 clock = pygame.time.Clock()
@@ -21,12 +21,9 @@ pygame.display.set_caption("Game of Life")
 screen = pygame.display.set_mode((BOARD_W, BOARD_H), depth=8)
 pygame.display.set_palette([OFF_COLOR]+[ON_COLOR]+[BLUE]+[GREEN]+[RED])
 
-kernel_h = np.array([1, 1, 1])
-CELLS_W, CELLS_H = BOARD_W//RESOLUTION_SCALE, BOARD_H//RESOLUTION_SCALE
-board = np.random.choice(a=[0, 1], size=(CELLS_W, CELLS_H))
-n_neighbors = np.zeros(shape=(CELLS_W, CELLS_H), dtype=np.dtype(np.int8))
-# board = np.random.choice(a=[0, 1], size=(CELLS_W+2, CELLS_H+2))
-# n_neighbors = np.zeros(shape=(CELLS_W+2, CELLS_H+2), dtype=np.dtype(np.int8))
+CELLS_W, CELLS_H = BOARD_W // SCALE, BOARD_H // SCALE
+board = np.random.choice(a=[0, 1], size=(CELLS_W+2, CELLS_H+2))
+n_neighbors = np.zeros(shape=(CELLS_W+2, CELLS_H+2), dtype=np.dtype(np.int8))
 
 
 def step_toroidal_moore():
@@ -42,8 +39,8 @@ def step_toroidal_moore():
 
 
 def draw_board():
-    # board_c = board[1:-1, 1:-1]
-    pygame.surfarray.blit_array(screen, np.repeat(np.repeat(board, RESOLUTION_SCALE, axis=0), RESOLUTION_SCALE, axis=1))
+    board_c = board[1:-1, 1:-1] if SCALE == 1 else np.repeat(np.repeat(board[1:-1, 1:-1], SCALE, axis=0), SCALE, axis=1)
+    pygame.surfarray.blit_array(screen, board_c)
     pygame.display.flip()
 
 
@@ -62,8 +59,8 @@ def profile_function(function, n_trials=3, n_per_trial=10):
 def step_frame():
     global frame_n
     frame_n += 1
-    step_toroidal_moore()
     # step_toroidal_moore()
+    step_toroidal_moore()
     # profile_function("draw_board")
     draw_board()
     # status_print(frame_n, 100)
