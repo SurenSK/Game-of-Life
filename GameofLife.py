@@ -28,7 +28,7 @@ board = np.random.choice(a=[0, 1], size=(CELLS_W+2, CELLS_H+2), p=[1-INIT_CONCEN
 
 
 def step_toroidal_moore():
-    global count
+    global count, board
     count = board.copy()
     count[0, :] = count[-2, :]
     count[:, 0] = count[:, -2]
@@ -90,4 +90,5 @@ print("Core-loop clock stopped...\n")
 print("RunTime ", (time_end - time_start))
 print("#Frames ", completed_frames)
 print("Avg.Frametime ", 1000 * (time_end - time_start) / completed_frames)
+print("Avg.FPS ", completed_frames / (time_end - time_start))
 print("\nExiting...")
