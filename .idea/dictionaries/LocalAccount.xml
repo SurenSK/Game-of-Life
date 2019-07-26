@@ -2,6 +2,7 @@
   <dictionary name="LocalAccount">
     <words>
       <w>disp</w>
+      <w>frametime</w>
       <w>toriodal</w>
     </words>
   </dictionary>
