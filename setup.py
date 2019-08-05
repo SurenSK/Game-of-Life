@@ -3,6 +3,8 @@ from Cython.Build import cythonize
 import timeit
 import numpy as np
 
+#python setup.py build_ext --inplace
+
 ext_options = {"compiler_directives": {"profile": True}, "annotate": True}
 setup(
     ext_modules = cythonize("cython_iterator.pyx", **ext_options),

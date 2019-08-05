@@ -3,16 +3,14 @@ import numpy as np
 cimport numpy as np
 cimport cython
 
-DTYPE = np.int
-ctypedef np.int_t DTYPE_t
-
 @cython.boundscheck(False)
 @cython.wraparound(False)
-def iterate(np.ndarray cy_board_o, np.ndarray cy_board_n):
-    cdef int hmax = cy_board_n.shape[0]-1
-    cdef int vmax = cy_board_n.shape[1]-1
-    cdef int [:, :]  o_view = cy_board_o
-    cdef int [:, :]  n_view = cy_board_n
+cpdef np.ndarray iterate(np.ndarray cy_board_o):
+    cdef np.ndarray cy_board_n = np.zeros_like(cy_board_o)
+    cdef int hmax = cy_board_o.shape[0]-1
+    cdef int vmax = cy_board_o.shape[1]-1
+    cdef unsigned char [:, :]  o_view = cy_board_o
+    cdef unsigned char [:, :]  n_view = cy_board_n
     cdef int i, j, c
     for i in range(1, hmax):
         for j in range(1, vmax):
@@ -21,6 +19,4 @@ def iterate(np.ndarray cy_board_o, np.ndarray cy_board_n):
                 n_view[i, j] = 1
             elif (c == 2) :
                 n_view[i, j] = o_view[i, j]
-            else :
-                n_view[i, j] = 0
     return cy_board_n
