@@ -8,7 +8,10 @@ import numpy as np
 from scipy import signal
 from scipy import ndimage
 
+print("Starting init...")
 time_init_start = time.time()
+
+import cython_iterator as cy
 
 RED, GREEN, BLUE = (255, 0, 0), (0, 128, 0), (0, 0, 255)
 BLACK, GRAY, WHITE = (0, 0, 0), (128, 128, 128), (255, 255, 255)
@@ -46,6 +49,17 @@ def step_toroidal_moore():
     board[count == 3] = 1
 
 
+def step_toroidal_moore_cy():
+    global count, board
+    if TOROIDAL_ENV:
+        count[0, :] = count[-2, :]
+        count[-1, :] = count[1, :]
+        count[:, -1] = count[:, 1]
+        count[:, 0] = count[:, -2]
+    count = board.copy()
+    board = cy.iterate(board, count)
+
+
 def draw_board():
     # # # Some sort of buffer thing going on, double flipping makes a huge visual difference in fluidity
     # # # Get screen pixels as arr, xor with disp arr or board or whatever, draw points that changed
@@ -78,16 +92,18 @@ def empty_region_print(max_window_w):
 
 
 def status_print(frame_n: int) -> None:
-    print("F={:<4d}\tT={:.0f}s\tAvg.t={:.0f}ms"
+    print("F={:<4d}\tT={:.0f}s\tAvg.t={:.2f}ms"
           .format(frame_n, (time.time() - time_start), (1000 * (time.time() - time_start) / frame_n)))
     # empty_region_print(269)
 
 
 def generate_frame(c_frame_n):
-    profile_function("step_toroidal_moore")
+    # profile_function("step_toroidal_moore")
     # step_toroidal_moore()
-    profile_function("draw_board")
-    # draw_board()
+    # profile_function("step_toroidal_moore_cy")
+    step_toroidal_moore_cy()
+    # profile_function("draw_board")
+    draw_board()
     status_print(c_frame_n) if c_frame_n % (required_frames // 20) == 0 else None
     return c_frame_n + 1
 
