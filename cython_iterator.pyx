@@ -5,8 +5,7 @@ cimport cython
 @cython.boundscheck(False)
 @cython.wraparound(False)
 @cython.initializedcheck(False)
-cpdef np.ndarray iterate(cy_board_o):
-    cdef np.ndarray cy_board_n = np.zeros_like(cy_board_o)
+cpdef np.ndarray iterate(np.ndarray cy_board_o, np.ndarray cy_board_n):
     cdef int hmax = cy_board_o.shape[0]-1
     cdef int vmax = cy_board_o.shape[1]-1
     cdef unsigned char [:, ::1] o_view = cy_board_o
@@ -19,4 +18,6 @@ cpdef np.ndarray iterate(cy_board_o):
                 n_view[i, j] = 1
             elif (c == 2) :
                 n_view[i, j] = o_view[i, j]
+            else:
+                n_view[i, j] = 0
     return cy_board_n

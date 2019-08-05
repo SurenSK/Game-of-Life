@@ -36,17 +36,19 @@ screen.set_alpha(None)
 pygame.display.set_palette([OFF_COLOR]+[ON_COLOR]+[GRAY]+[RED]+[GREEN]+[BLUE])
 
 BOARD_W, BOARD_H = (0, 2)[TOROIDAL_ENV] + SCREEN_W // SCALE, (0, 2)[TOROIDAL_ENV] + SCREEN_H // SCALE
-o_board = np.ascontiguousarray(np.random.choice(a=[0, 1], size=(BOARD_W, BOARD_H), p=[1 - INI_P, INI_P]), dtype=np.uint8)
+o_board = np.ascontiguousarray(np.random.choice(a=[0, 1], size=(BOARD_W, BOARD_H), p=[1-INI_P, INI_P]), dtype=np.uint8)
+n_board = np.zeros_like(o_board)
 
+print(o_board.nbytes, n_board.nbytes)
 
 def step_toroidal_moore_cy():
-    global o_board
+    global o_board, n_board
     if TOROIDAL_ENV:
         o_board[0, :] = o_board[-2, :]
         o_board[-1, :] = o_board[1, :]
         o_board[:, -1] = o_board[:, 1]
         o_board[:, 0] = o_board[:, -2]
-    o_board = cy.iterate(o_board)
+    o_board = cy.iterate(o_board, n_board)
 
 
 def draw_board():
