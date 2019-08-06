@@ -2596,7 +2596,7 @@ static void __pyx_f_15cython_iterator_iterate(__Pyx_memviewslice __pyx_v_b_, __p
  * 
  *     if flag == 0:             # <<<<<<<<<<<<<<
  *         b_[1,:,:]=0
- *         for i in prange(1, w, nogil=True, schedule='static', num_threads = 4, chunksize=4):
+ *         for i in prange(1, w, nogil=True, schedule='static', num_threads = 4, chunksize=6):
  */
   __pyx_t_1 = ((__pyx_v_flag == 0) != 0);
   if (__pyx_t_1) {
@@ -2605,7 +2605,7 @@ static void __pyx_f_15cython_iterator_iterate(__Pyx_memviewslice __pyx_v_b_, __p
  * 
  *     if flag == 0:
  *         b_[1,:,:]=0             # <<<<<<<<<<<<<<
- *         for i in prange(1, w, nogil=True, schedule='static', num_threads = 4, chunksize=4):
+ *         for i in prange(1, w, nogil=True, schedule='static', num_threads = 4, chunksize=6):
  *             for j in range(1, h):
  */
     __pyx_t_2.data = __pyx_v_b_.data;
@@ -2645,7 +2645,7 @@ __pyx_t_2.strides[1] = __pyx_v_b_.strides[2];
     /* "cython_iterator.pyx":22
  *     if flag == 0:
  *         b_[1,:,:]=0
- *         for i in prange(1, w, nogil=True, schedule='static', num_threads = 4, chunksize=4):             # <<<<<<<<<<<<<<
+ *         for i in prange(1, w, nogil=True, schedule='static', num_threads = 4, chunksize=6):             # <<<<<<<<<<<<<<
  *             for j in range(1, h):
  *                 n = b_[0, i-1, j-1] + b_[0, i-1, j] + b_[0, i-1, j+1] + b_[0, i, j-1] + b_[0, i, j+1] + b_[0, i+1, j-1] + b_[0, i+1, j] + b_[0, i+1, j+1]
  */
@@ -2659,7 +2659,7 @@ __pyx_t_2.strides[1] = __pyx_v_b_.strides[2];
           __pyx_t_3 = __pyx_e_15cython_iterator_w;
           if (1 == 0) abort();
           {
-              __pyx_t_6 = 4;
+              __pyx_t_6 = 6;
               #if ((defined(__APPLE__) || defined(__OSX__)) && (defined(__GNUC__) && (__GNUC__ > 2 || (__GNUC__ == 2 && (__GNUC_MINOR__ > 95)))))
                   #undef likely
                   #undef unlikely
@@ -2685,7 +2685,7 @@ __pyx_t_2.strides[1] = __pyx_v_b_.strides[2];
 
                               /* "cython_iterator.pyx":23
  *         b_[1,:,:]=0
- *         for i in prange(1, w, nogil=True, schedule='static', num_threads = 4, chunksize=4):
+ *         for i in prange(1, w, nogil=True, schedule='static', num_threads = 4, chunksize=6):
  *             for j in range(1, h):             # <<<<<<<<<<<<<<
  *                 n = b_[0, i-1, j-1] + b_[0, i-1, j] + b_[0, i-1, j+1] + b_[0, i, j-1] + b_[0, i, j+1] + b_[0, i+1, j-1] + b_[0, i+1, j] + b_[0, i+1, j+1]
  *                 if n==2: b_[1, i, j] = b_[0, i, j]
@@ -2696,7 +2696,7 @@ __pyx_t_2.strides[1] = __pyx_v_b_.strides[2];
                                 __pyx_v_j = __pyx_t_9;
 
                                 /* "cython_iterator.pyx":24
- *         for i in prange(1, w, nogil=True, schedule='static', num_threads = 4, chunksize=4):
+ *         for i in prange(1, w, nogil=True, schedule='static', num_threads = 4, chunksize=6):
  *             for j in range(1, h):
  *                 n = b_[0, i-1, j-1] + b_[0, i-1, j] + b_[0, i-1, j+1] + b_[0, i, j-1] + b_[0, i, j+1] + b_[0, i+1, j-1] + b_[0, i+1, j] + b_[0, i+1, j+1]             # <<<<<<<<<<<<<<
  *                 if n==2: b_[1, i, j] = b_[0, i, j]
@@ -2778,7 +2778,7 @@ __pyx_t_2.strides[1] = __pyx_v_b_.strides[2];
         /* "cython_iterator.pyx":22
  *     if flag == 0:
  *         b_[1,:,:]=0
- *         for i in prange(1, w, nogil=True, schedule='static', num_threads = 4, chunksize=4):             # <<<<<<<<<<<<<<
+ *         for i in prange(1, w, nogil=True, schedule='static', num_threads = 4, chunksize=6):             # <<<<<<<<<<<<<<
  *             for j in range(1, h):
  *                 n = b_[0, i-1, j-1] + b_[0, i-1, j] + b_[0, i-1, j+1] + b_[0, i, j-1] + b_[0, i, j+1] + b_[0, i+1, j-1] + b_[0, i+1, j] + b_[0, i+1, j+1]
  */
@@ -2799,7 +2799,7 @@ __pyx_t_2.strides[1] = __pyx_v_b_.strides[2];
  * 
  *     if flag == 0:             # <<<<<<<<<<<<<<
  *         b_[1,:,:]=0
- *         for i in prange(1, w, nogil=True, schedule='static', num_threads = 4, chunksize=4):
+ *         for i in prange(1, w, nogil=True, schedule='static', num_threads = 4, chunksize=6):
  */
     goto __pyx_L3;
   }
@@ -2808,7 +2808,7 @@ __pyx_t_2.strides[1] = __pyx_v_b_.strides[2];
  *                 elif n==3: b_[1, i, j] = 1
  *     else:
  *         b_[0,:,:]=0             # <<<<<<<<<<<<<<
- *         for i in prange(1, w, nogil=True, schedule='static', num_threads = 4, chunksize=4):
+ *         for i in prange(1, w, nogil=True, schedule='static', num_threads = 4, chunksize=40):
  *             for j in range(1, h):
  */
   /*else*/ {
@@ -2849,7 +2849,7 @@ __pyx_t_43.strides[1] = __pyx_v_b_.strides[2];
     /* "cython_iterator.pyx":29
  *     else:
  *         b_[0,:,:]=0
- *         for i in prange(1, w, nogil=True, schedule='static', num_threads = 4, chunksize=4):             # <<<<<<<<<<<<<<
+ *         for i in prange(1, w, nogil=True, schedule='static', num_threads = 4, chunksize=40):             # <<<<<<<<<<<<<<
  *             for j in range(1, h):
  *                 n = b_[1, i-1, j-1] + b_[1, i-1, j] + b_[1, i-1, j+1] + b_[1, i, j-1] + b_[1, i, j+1] + b_[1, i+1, j-1] + b_[1, i+1, j] + b_[1, i+1, j+1]
  */
@@ -2863,7 +2863,7 @@ __pyx_t_43.strides[1] = __pyx_v_b_.strides[2];
           __pyx_t_3 = __pyx_e_15cython_iterator_w;
           if (1 == 0) abort();
           {
-              __pyx_t_6 = 4;
+              __pyx_t_6 = 40;
               #if ((defined(__APPLE__) || defined(__OSX__)) && (defined(__GNUC__) && (__GNUC__ > 2 || (__GNUC__ == 2 && (__GNUC_MINOR__ > 95)))))
                   #undef likely
                   #undef unlikely
@@ -2889,7 +2889,7 @@ __pyx_t_43.strides[1] = __pyx_v_b_.strides[2];
 
                               /* "cython_iterator.pyx":30
  *         b_[0,:,:]=0
- *         for i in prange(1, w, nogil=True, schedule='static', num_threads = 4, chunksize=4):
+ *         for i in prange(1, w, nogil=True, schedule='static', num_threads = 4, chunksize=40):
  *             for j in range(1, h):             # <<<<<<<<<<<<<<
  *                 n = b_[1, i-1, j-1] + b_[1, i-1, j] + b_[1, i-1, j+1] + b_[1, i, j-1] + b_[1, i, j+1] + b_[1, i+1, j-1] + b_[1, i+1, j] + b_[1, i+1, j+1]
  *                 if n==2: b_[0, i, j] = b_[1, i, j]
@@ -2900,7 +2900,7 @@ __pyx_t_43.strides[1] = __pyx_v_b_.strides[2];
                                 __pyx_v_j = __pyx_t_9;
 
                                 /* "cython_iterator.pyx":31
- *         for i in prange(1, w, nogil=True, schedule='static', num_threads = 4, chunksize=4):
+ *         for i in prange(1, w, nogil=True, schedule='static', num_threads = 4, chunksize=40):
  *             for j in range(1, h):
  *                 n = b_[1, i-1, j-1] + b_[1, i-1, j] + b_[1, i-1, j+1] + b_[1, i, j-1] + b_[1, i, j+1] + b_[1, i+1, j-1] + b_[1, i+1, j] + b_[1, i+1, j+1]             # <<<<<<<<<<<<<<
  *                 if n==2: b_[0, i, j] = b_[1, i, j]
@@ -2979,7 +2979,7 @@ __pyx_t_43.strides[1] = __pyx_v_b_.strides[2];
         /* "cython_iterator.pyx":29
  *     else:
  *         b_[0,:,:]=0
- *         for i in prange(1, w, nogil=True, schedule='static', num_threads = 4, chunksize=4):             # <<<<<<<<<<<<<<
+ *         for i in prange(1, w, nogil=True, schedule='static', num_threads = 4, chunksize=40):             # <<<<<<<<<<<<<<
  *             for j in range(1, h):
  *                 n = b_[1, i-1, j-1] + b_[1, i-1, j] + b_[1, i-1, j+1] + b_[1, i, j-1] + b_[1, i, j+1] + b_[1, i+1, j-1] + b_[1, i+1, j] + b_[1, i+1, j+1]
  */
