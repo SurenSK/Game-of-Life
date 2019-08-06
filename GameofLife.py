@@ -36,19 +36,17 @@ screen.set_alpha(None)
 pygame.display.set_palette([OFF_COLOR]+[ON_COLOR]+[GRAY]+[RED]+[GREEN]+[BLUE])
 
 BOARD_W, BOARD_H = (0, 2)[TOROIDAL_ENV] + SCREEN_W // SCALE, (0, 2)[TOROIDAL_ENV] + SCREEN_H // SCALE
-o_board = np.ascontiguousarray(np.random.choice(a=[0, 1], size=(BOARD_W, BOARD_H), p=[1-INI_P, INI_P]), dtype=np.uint8)
-n_board = np.zeros_like(o_board)
-
-print(o_board.nbytes, n_board.nbytes)
+board = np.ascontiguousarray(np.random.choice(a=[0, 1], size=(BOARD_W, BOARD_H), p=[1 - INI_P, INI_P]), dtype=np.uint8)
+buffer = np.ascontiguousarray(np.empty_like(board))
 
 def step_toroidal_moore_cy():
-    global o_board, n_board
+    global board
     if TOROIDAL_ENV:
-        o_board[0, :] = o_board[-2, :]
-        o_board[-1, :] = o_board[1, :]
-        o_board[:, -1] = o_board[:, 1]
-        o_board[:, 0] = o_board[:, -2]
-    o_board = cy.iterate(o_board, n_board)
+        board[0, :] = board[-2, :]
+        board[-1, :] = board[1, :]
+        board[:, -1] = board[:, 1]
+        board[:, 0] = board[:, -2]
+    cy.iterate(board, buffer)
 
 
 def draw_board():
@@ -58,7 +56,7 @@ def draw_board():
     # # Only manage ~3k pixels with draw rects for the cost of blit_arr(1920*1080)
     # # Pixelarray would just be even slower than blit_array?
     # Only if every single pixel is changed?
-    disp_arr = (o_board, o_board[1:-1, 1:-1])[TOROIDAL_ENV]
+    disp_arr = (board, board[1:-1, 1:-1])[TOROIDAL_ENV]
     pygame.surfarray.blit_array(screen, disp_arr if SCALE == 1 else
                                 np.repeat(np.repeat(disp_arr, SCALE, axis=0), SCALE, axis=1))
     pygame.display.update()
@@ -72,7 +70,7 @@ def profile_function(function, n_trials=3, n_per_trial=10):
 
 def empty_region_print(max_window_w):
     print("Empty NxN Ratios:")
-    wide_count = o_board.copy()
+    wide_count = board.copy()
     empty_ratio = np.bincount(wide_count.ravel())[0] / ((BOARD_W - 1) * (SCREEN_H - 1))
     print("\t 3x3\t{:.2f}".format(empty_ratio))
     for window_w in range(5, max_window_w+1, 2):
@@ -90,16 +88,16 @@ def status_print(frame_n: int) -> None:
 
 
 def generate_frame(c_frame_n):
-    # profile_function("step_toroidal_moore_cy")
-    step_toroidal_moore_cy()
-    # profile_function("draw_board")
-    draw_board()
-    status_print(c_frame_n) if c_frame_n % (required_frames // 20) == 0 else None
+    profile_function("step_toroidal_moore_cy")
+    # step_toroidal_moore_cy()
+    profile_function("draw_board")
+    # draw_board()
+    # status_print(c_frame_n) if c_frame_n % (required_frames // 20) == 0 else None
     return c_frame_n + 1
 
 
 completed_frames = 1
-required_frames = 5000
+required_frames = 1000
 
 time_init_end = time.time()
 print("Total Initialization...  {:.0f}ms".format(1000 * (time_init_end - time_init_start)))
