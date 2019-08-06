@@ -19,14 +19,14 @@ cpdef void iterate(int_8 [:, :, ::1] b_, int_8 flag) nogil:
 
     if flag == 0:
         b_[1,:,:]=0
-        for i in prange(1, w, nogil=True, num_threads = 4):
+        for i in prange(1, w, nogil=True, schedule='static', num_threads = 4, chunksize=160):
             for j in range(1, h):
                 n = b_[0, i-1, j-1] + b_[0, i-1, j] + b_[0, i-1, j+1] + b_[0, i, j-1] + b_[0, i, j+1] + b_[0, i+1, j-1] + b_[0, i+1, j] + b_[0, i+1, j+1]
                 if n==2: b_[1, i, j] = b_[0, i, j]
                 elif n==3: b_[1, i, j] = 1
     else:
         b_[0,:,:]=0
-        for i in prange(1, w, nogil=True, num_threads = 4):
+        for i in prange(1, w, nogil=True, schedule='static', num_threads = 4, chunksize=160):
             for j in range(1, h):
                 n = b_[1, i-1, j-1] + b_[1, i-1, j] + b_[1, i-1, j+1] + b_[1, i, j-1] + b_[1, i, j+1] + b_[1, i+1, j-1] + b_[1, i+1, j] + b_[1, i+1, j+1]
                 if n==2: b_[0, i, j] = b_[1, i, j]
