@@ -45,7 +45,7 @@ def step_toroidal_moore_cy():
     #    board_0[-1, :] = board_0[1, :]
     #    board_0[:, -1] = board_0[:, 1]
     #    board_0[:, 0] = board_0[:, -2]
-    cy.iterate_v2(board_c, current_frame_n)
+    cy.iterate(board_c, c_frame_n)
 
 
 def draw_board():
@@ -56,7 +56,7 @@ def draw_board():
     # # Pixelarray would just be even slower than blit_array?
     # Only if every single pixel is changed?
     # disp_arr = (board_0, board_0[1:-1, 1:-1])[TOROIDAL_ENV]
-    active_layer = current_frame_n % 2
+    active_layer = c_frame_n % 2
     disp_arr = (board_c[active_layer, :, :], board_c[active_layer, 1:-1, 1:-1])[TOROIDAL_ENV]
     pygame.surfarray.blit_array(screen, disp_arr if SCALE == 1 else
                                 np.repeat(np.repeat(disp_arr, SCALE, axis=0), SCALE, axis=1))
@@ -66,12 +66,12 @@ def draw_board():
 def profile_function(function, n_trials=3, n_per_trial=10):
     times = timeit.repeat(setup="from __main__ import " + function, stmt=function+"()",
                           repeat=n_trials, number=n_per_trial)
-    print("Frame {:3d} : {:24s} ~{:.2f}ms".format(current_frame_n, function + "()", 1000 * min(times) / n_per_trial))
+    print("Frame {:3d} : {:24s} ~{:.2f}ms".format(c_frame_n, function + "()", 1000 * min(times) / n_per_trial))
 
 
 def empty_region_print(max_window_w):
     print("Empty NxN Ratios:")
-    active_layer = current_frame_n % 2
+    active_layer = c_frame_n % 2
     wide_count = board_c[active_layer, 1:-1, 1:-1].copy()
     empty_ratio = np.bincount(wide_count.ravel())[0] / ((BOARD_W - 1) * (SCREEN_H - 1))
     print("\t 3x3\t{:.2f}".format(empty_ratio))
@@ -84,41 +84,49 @@ def empty_region_print(max_window_w):
 
 
 def status_print(frame_n: int) -> None:
-    print("F={:<4d}\tT={:.0f}s\tAvg.t={:.2f}ms"
-          .format(frame_n, (time.time() - time_start), (1000 * (time.time() - time_start) / frame_n)))
+    global time_chunk_start
+    print("F={:<4d}\tT={:.0f}s\t".format(frame_n, (time.time() - time_start)), end="")
+    s_per_frame = (time.time() - time_chunk_start) / (required_frames // num_reports)
+    print("Avg.t={:.2f}ms\t".format(1000 * s_per_frame), end="")
+    print("Avg.FPS={:.0f}".format(1/s_per_frame))
+    time_chunk_start = time.time()
     # empty_region_print(269)
 
 
-def generate_frame(c_frame_n):
-    # profile_function("step_toroidal_moore_cy")
-    step_toroidal_moore_cy()
-    # profile_function("draw_board")
-    draw_board()
-    status_print(c_frame_n) if c_frame_n % (required_frames // 20) == 0 else None
-    return c_frame_n + 1
+def generate_frame():
+    global c_frame_n
+    flag = c_frame_n % 2
+    dst_f = (0, 1)[flag]
+    src_f = (1, 0)[flag]
+    pygame.surfarray.blit_array(screen, cy.iterate_get_screen_v2(board_c, dst_f, src_f))
+    pygame.display.update()
+    status_print(c_frame_n) if c_frame_n % (required_frames // num_reports) == 0 else None
+    c_frame_n += 1
 
 
-current_frame_n = 1
+c_frame_n = 1
 required_frames = 5000
+num_reports = 20
 
 time_init_end = time.time()
 print("Total Initialization...  {:.0f}ms".format(1000 * (time_init_end - time_init_start)))
 print("\nCore-loop clock starting...")
+time_chunk_start = time.time()
 time_start = time.time()
 done = False
-while not done and not current_frame_n > required_frames:
+while not done and not c_frame_n > required_frames:
     for event in pygame.event.get():
         done = True if event.type == pygame.QUIT else False
         # if event.type == pygame.MOUSEBUTTONDOWN:
             # completed_frames = generate_frame(completed_frames)
-
-    current_frame_n = generate_frame(current_frame_n)
+    generate_frame()
     clock.tick()
 
+c_frame_n -= 1
 time_end = time.time()
 print("Core-loop clock stopped...\n")
 print("Runtime {:.0f}s".format(time_end - time_start))
-print("#Frames ", current_frame_n)
-print("Avg. {:.2f}ms Frametime".format(1000 * (time_end - time_start) / current_frame_n))
-print("Avg. {:.2f}FPS".format(current_frame_n / (time_end - time_start)))
+print("#Frames ", c_frame_n)
+print("Avg. {:.2f}ms Frametime".format(1000 * (time_end - time_start) / c_frame_n))
+print("Avg. {:.2f}FPS".format(c_frame_n / (time_end - time_start)))
 print("\nExiting...")
