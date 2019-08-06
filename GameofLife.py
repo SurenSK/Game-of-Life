@@ -25,7 +25,7 @@ ON_COLOR = BLACK
 OFF_COLOR = WHITE
 SCREEN_W, SCREEN_H = 1920, 1080
 TOROIDAL_ENV = True
-INI_P = 0.5
+P_0 = 0.5
 SCALE = 1
 
 pygame.init()
@@ -36,8 +36,7 @@ screen.set_alpha(None)
 pygame.display.set_palette([OFF_COLOR]+[ON_COLOR]+[GRAY]+[RED]+[GREEN]+[BLUE])
 
 BOARD_W, BOARD_H = (0, 2)[TOROIDAL_ENV] + SCREEN_W // SCALE, (0, 2)[TOROIDAL_ENV] + SCREEN_H // SCALE
-board_c = np.ascontiguousarray(np.random.choice(a=[0, 1], size=(2, BOARD_W, BOARD_H), p=[1 - INI_P, INI_P]), dtype=np.uint8)
-
+board_c = np.ascontiguousarray(np.random.choice(a=[0, 1], size=(2, BOARD_W, BOARD_H), p=[1 - P_0, P_0]), dtype=np.uint8)
 
 def step_toroidal_moore_cy():
     #if TOROIDAL_ENV:
@@ -96,7 +95,7 @@ def status_print(frame_n: int) -> None:
 def generate_frame():
     global c_frame_n
     flag = c_frame_n % 2
-    cy.iterate_get_screen_v2(board_c, flag)
+    cy.iterate(board_c, flag)
     pygame.surfarray.blit_array(screen, board_c[flag, 1:-1, 1:-1])
     pygame.display.update()
     status_print(c_frame_n) if c_frame_n % (required_frames // num_reports) == 0 else None
