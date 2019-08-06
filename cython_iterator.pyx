@@ -5,18 +5,18 @@ cimport cython
 @cython.boundscheck(False)
 @cython.wraparound(False)
 @cython.initializedcheck(False)
-cpdef void iterate(np.ndarray cy_board_o, np.ndarray cy_board_n):
-    cdef unsigned char [:, ::1] o_view = cy_board_o
-    cdef unsigned char [:, ::1] n_view = cy_board_n
-    cdef int hmax = cy_board_o.shape[0]-1
-    cdef int vmax = cy_board_o.shape[1]-1
+cpdef void iterate(np.ndarray cur_board, np.ndarray new_board):
+    cdef unsigned char [:, ::1] c_ = cur_board
+    cdef unsigned char [:, ::1] n_ = new_board
+    cdef int hmax = cur_board.shape[0]-1
+    cdef int vmax = cur_board.shape[1]-1
     cdef int i, j, c
 
-    n_view[:] = 0
+    n_[:] = 0
 
     for i in range(1, hmax):
         for j in range(1, vmax):
-            c = o_view[i-1, j-1] + o_view[i-1, j] + o_view[i-1, j+1] + o_view[i, j-1] + o_view[i, j+1] + o_view[i+1, j-1] + o_view[i+1, j] + o_view[i+1, j+1]
-            if (c == 3) : n_view[i, j] = 1
-            elif (c == 2) : n_view[i, j] = o_view[i, j]
-    o_view[:] = n_view
+            c = c_[i-1, j-1] + c_[i-1, j] + c_[i-1, j+1] + c_[i, j-1] + c_[i, j+1] + c_[i+1, j-1] + c_[i+1, j] + c_[i+1, j+1]
+            if (c == 3) : n_[i, j] = 1
+            elif (c == 2) : n_[i, j] = c_[i, j]
+    c_[:] = n_

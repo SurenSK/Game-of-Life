@@ -2215,13 +2215,13 @@ static const char __pyx_k_itemsize[] = "itemsize";
 static const char __pyx_k_pyx_type[] = "__pyx_type";
 static const char __pyx_k_setstate[] = "__setstate__";
 static const char __pyx_k_TypeError[] = "TypeError";
+static const char __pyx_k_cur_board[] = "cur_board";
 static const char __pyx_k_enumerate[] = "enumerate";
+static const char __pyx_k_new_board[] = "new_board";
 static const char __pyx_k_pyx_state[] = "__pyx_state";
 static const char __pyx_k_reduce_ex[] = "__reduce_ex__";
 static const char __pyx_k_IndexError[] = "IndexError";
 static const char __pyx_k_ValueError[] = "ValueError";
-static const char __pyx_k_cy_board_n[] = "cy_board_n";
-static const char __pyx_k_cy_board_o[] = "cy_board_o";
 static const char __pyx_k_pyx_result[] = "__pyx_result";
 static const char __pyx_k_pyx_vtable[] = "__pyx_vtable__";
 static const char __pyx_k_ImportError[] = "ImportError";
@@ -2307,8 +2307,7 @@ static PyObject *__pyx_n_s_class;
 static PyObject *__pyx_n_s_cline_in_traceback;
 static PyObject *__pyx_kp_s_contiguous_and_direct;
 static PyObject *__pyx_kp_s_contiguous_and_indirect;
-static PyObject *__pyx_n_s_cy_board_n;
-static PyObject *__pyx_n_s_cy_board_o;
+static PyObject *__pyx_n_s_cur_board;
 static PyObject *__pyx_n_s_dict;
 static PyObject *__pyx_n_s_dtype_is_object;
 static PyObject *__pyx_n_s_encode;
@@ -2333,6 +2332,7 @@ static PyObject *__pyx_kp_u_ndarray_is_not_C_contiguous;
 static PyObject *__pyx_kp_u_ndarray_is_not_Fortran_contiguou;
 static PyObject *__pyx_n_s_ndim;
 static PyObject *__pyx_n_s_new;
+static PyObject *__pyx_n_s_new_board;
 static PyObject *__pyx_kp_s_no_default___reduce___due_to_non;
 static PyObject *__pyx_n_s_np;
 static PyObject *__pyx_n_s_numpy;
@@ -2371,7 +2371,7 @@ static PyObject *__pyx_kp_s_unable_to_allocate_shape_and_str;
 static PyObject *__pyx_kp_u_unknown_dtype_code_in_numpy_pxd;
 static PyObject *__pyx_n_s_unpack;
 static PyObject *__pyx_n_s_update;
-static PyObject *__pyx_pf_15cython_iterator_iterate(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_cy_board_o, PyArrayObject *__pyx_v_cy_board_n); /* proto */
+static PyObject *__pyx_pf_15cython_iterator_iterate(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_cur_board, PyArrayObject *__pyx_v_new_board); /* proto */
 static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, Py_buffer *__pyx_v_info, int __pyx_v_flags); /* proto */
 static void __pyx_pf_5numpy_7ndarray_2__releasebuffer__(PyArrayObject *__pyx_v_self, Py_buffer *__pyx_v_info); /* proto */
 static int __pyx_array___pyx_pf_15View_dot_MemoryView_5array___cinit__(struct __pyx_array_obj *__pyx_v_self, PyObject *__pyx_v_shape, Py_ssize_t __pyx_v_itemsize, PyObject *__pyx_v_format, PyObject *__pyx_v_mode, int __pyx_v_allocate_buffer); /* proto */
@@ -2461,15 +2461,15 @@ static PyObject *__pyx_codeobj__32;
 /* "cython_iterator.pyx":8
  * @cython.wraparound(False)
  * @cython.initializedcheck(False)
- * cpdef void iterate(np.ndarray cy_board_o, np.ndarray cy_board_n):             # <<<<<<<<<<<<<<
- *     cdef unsigned char [:, ::1] o_view = cy_board_o
- *     cdef unsigned char [:, ::1] n_view = cy_board_n
+ * cpdef void iterate(np.ndarray cur_board, np.ndarray new_board):             # <<<<<<<<<<<<<<
+ *     cdef unsigned char [:, ::1] c_ = cur_board
+ *     cdef unsigned char [:, ::1] n_ = new_board
  */
 
 static PyObject *__pyx_pw_15cython_iterator_1iterate(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static void __pyx_f_15cython_iterator_iterate(PyArrayObject *__pyx_v_cy_board_o, PyArrayObject *__pyx_v_cy_board_n, CYTHON_UNUSED int __pyx_skip_dispatch) {
-  __Pyx_memviewslice __pyx_v_o_view = { 0, 0, { 0 }, { 0 }, { 0 } };
-  __Pyx_memviewslice __pyx_v_n_view = { 0, 0, { 0 }, { 0 }, { 0 } };
+static void __pyx_f_15cython_iterator_iterate(PyArrayObject *__pyx_v_cur_board, PyArrayObject *__pyx_v_new_board, CYTHON_UNUSED int __pyx_skip_dispatch) {
+  __Pyx_memviewslice __pyx_v_c_ = { 0, 0, { 0 }, { 0 }, { 0 } };
+  __Pyx_memviewslice __pyx_v_n_ = { 0, 0, { 0 }, { 0 }, { 0 } };
   int __pyx_v_hmax;
   int __pyx_v_vmax;
   int __pyx_v_i;
@@ -2509,59 +2509,59 @@ static void __pyx_f_15cython_iterator_iterate(PyArrayObject *__pyx_v_cy_board_o,
 
   /* "cython_iterator.pyx":9
  * @cython.initializedcheck(False)
- * cpdef void iterate(np.ndarray cy_board_o, np.ndarray cy_board_n):
- *     cdef unsigned char [:, ::1] o_view = cy_board_o             # <<<<<<<<<<<<<<
- *     cdef unsigned char [:, ::1] n_view = cy_board_n
- *     cdef int hmax = cy_board_o.shape[0]-1
+ * cpdef void iterate(np.ndarray cur_board, np.ndarray new_board):
+ *     cdef unsigned char [:, ::1] c_ = cur_board             # <<<<<<<<<<<<<<
+ *     cdef unsigned char [:, ::1] n_ = new_board
+ *     cdef int hmax = cur_board.shape[0]-1
  */
-  __pyx_t_1 = __Pyx_PyObject_to_MemoryviewSlice_d_dc_unsigned_char(((PyObject *)__pyx_v_cy_board_o), PyBUF_WRITABLE); if (unlikely(!__pyx_t_1.memview)) __PYX_ERR(0, 9, __pyx_L1_error)
-  __pyx_v_o_view = __pyx_t_1;
+  __pyx_t_1 = __Pyx_PyObject_to_MemoryviewSlice_d_dc_unsigned_char(((PyObject *)__pyx_v_cur_board), PyBUF_WRITABLE); if (unlikely(!__pyx_t_1.memview)) __PYX_ERR(0, 9, __pyx_L1_error)
+  __pyx_v_c_ = __pyx_t_1;
   __pyx_t_1.memview = NULL;
   __pyx_t_1.data = NULL;
 
   /* "cython_iterator.pyx":10
- * cpdef void iterate(np.ndarray cy_board_o, np.ndarray cy_board_n):
- *     cdef unsigned char [:, ::1] o_view = cy_board_o
- *     cdef unsigned char [:, ::1] n_view = cy_board_n             # <<<<<<<<<<<<<<
- *     cdef int hmax = cy_board_o.shape[0]-1
- *     cdef int vmax = cy_board_o.shape[1]-1
+ * cpdef void iterate(np.ndarray cur_board, np.ndarray new_board):
+ *     cdef unsigned char [:, ::1] c_ = cur_board
+ *     cdef unsigned char [:, ::1] n_ = new_board             # <<<<<<<<<<<<<<
+ *     cdef int hmax = cur_board.shape[0]-1
+ *     cdef int vmax = cur_board.shape[1]-1
  */
-  __pyx_t_1 = __Pyx_PyObject_to_MemoryviewSlice_d_dc_unsigned_char(((PyObject *)__pyx_v_cy_board_n), PyBUF_WRITABLE); if (unlikely(!__pyx_t_1.memview)) __PYX_ERR(0, 10, __pyx_L1_error)
-  __pyx_v_n_view = __pyx_t_1;
+  __pyx_t_1 = __Pyx_PyObject_to_MemoryviewSlice_d_dc_unsigned_char(((PyObject *)__pyx_v_new_board), PyBUF_WRITABLE); if (unlikely(!__pyx_t_1.memview)) __PYX_ERR(0, 10, __pyx_L1_error)
+  __pyx_v_n_ = __pyx_t_1;
   __pyx_t_1.memview = NULL;
   __pyx_t_1.data = NULL;
 
   /* "cython_iterator.pyx":11
- *     cdef unsigned char [:, ::1] o_view = cy_board_o
- *     cdef unsigned char [:, ::1] n_view = cy_board_n
- *     cdef int hmax = cy_board_o.shape[0]-1             # <<<<<<<<<<<<<<
- *     cdef int vmax = cy_board_o.shape[1]-1
+ *     cdef unsigned char [:, ::1] c_ = cur_board
+ *     cdef unsigned char [:, ::1] n_ = new_board
+ *     cdef int hmax = cur_board.shape[0]-1             # <<<<<<<<<<<<<<
+ *     cdef int vmax = cur_board.shape[1]-1
  *     cdef int i, j, c
  */
-  __pyx_v_hmax = ((__pyx_v_cy_board_o->dimensions[0]) - 1);
+  __pyx_v_hmax = ((__pyx_v_cur_board->dimensions[0]) - 1);
 
   /* "cython_iterator.pyx":12
- *     cdef unsigned char [:, ::1] n_view = cy_board_n
- *     cdef int hmax = cy_board_o.shape[0]-1
- *     cdef int vmax = cy_board_o.shape[1]-1             # <<<<<<<<<<<<<<
+ *     cdef unsigned char [:, ::1] n_ = new_board
+ *     cdef int hmax = cur_board.shape[0]-1
+ *     cdef int vmax = cur_board.shape[1]-1             # <<<<<<<<<<<<<<
  *     cdef int i, j, c
  * 
  */
-  __pyx_v_vmax = ((__pyx_v_cy_board_o->dimensions[1]) - 1);
+  __pyx_v_vmax = ((__pyx_v_cur_board->dimensions[1]) - 1);
 
   /* "cython_iterator.pyx":15
  *     cdef int i, j, c
  * 
- *     n_view[:] = 0             # <<<<<<<<<<<<<<
+ *     n_[:] = 0             # <<<<<<<<<<<<<<
  * 
  *     for i in range(1, hmax):
  */
   {
       unsigned char __pyx_temp_scalar = 0;
       {
-          Py_ssize_t __pyx_temp_extent = __pyx_v_n_view.shape[0] * __pyx_v_n_view.shape[1];
+          Py_ssize_t __pyx_temp_extent = __pyx_v_n_.shape[0] * __pyx_v_n_.shape[1];
           Py_ssize_t __pyx_temp_idx;
-          unsigned char *__pyx_temp_pointer = (unsigned char *) __pyx_v_n_view.data;
+          unsigned char *__pyx_temp_pointer = (unsigned char *) __pyx_v_n_.data;
           for (__pyx_temp_idx = 0; __pyx_temp_idx < __pyx_temp_extent; __pyx_temp_idx++) {
             *((unsigned char *) __pyx_temp_pointer) = __pyx_temp_scalar;
             __pyx_temp_pointer += 1;
@@ -2570,11 +2570,11 @@ static void __pyx_f_15cython_iterator_iterate(PyArrayObject *__pyx_v_cy_board_o,
   }
 
   /* "cython_iterator.pyx":17
- *     n_view[:] = 0
+ *     n_[:] = 0
  * 
  *     for i in range(1, hmax):             # <<<<<<<<<<<<<<
  *         for j in range(1, vmax):
- *             c = o_view[i-1, j-1] + o_view[i-1, j] + o_view[i-1, j+1] + o_view[i, j-1] + o_view[i, j+1] + o_view[i+1, j-1] + o_view[i+1, j] + o_view[i+1, j+1]
+ *             c = c_[i-1, j-1] + c_[i-1, j] + c_[i-1, j+1] + c_[i, j-1] + c_[i, j+1] + c_[i+1, j-1] + c_[i+1, j] + c_[i+1, j+1]
  */
   __pyx_t_2 = __pyx_v_hmax;
   __pyx_t_3 = __pyx_t_2;
@@ -2585,8 +2585,8 @@ static void __pyx_f_15cython_iterator_iterate(PyArrayObject *__pyx_v_cy_board_o,
  * 
  *     for i in range(1, hmax):
  *         for j in range(1, vmax):             # <<<<<<<<<<<<<<
- *             c = o_view[i-1, j-1] + o_view[i-1, j] + o_view[i-1, j+1] + o_view[i, j-1] + o_view[i, j+1] + o_view[i+1, j-1] + o_view[i+1, j] + o_view[i+1, j+1]
- *             if (c == 3) : n_view[i, j] = 1
+ *             c = c_[i-1, j-1] + c_[i-1, j] + c_[i-1, j+1] + c_[i, j-1] + c_[i, j+1] + c_[i+1, j-1] + c_[i+1, j] + c_[i+1, j+1]
+ *             if (c == 3) : n_[i, j] = 1
  */
     __pyx_t_5 = __pyx_v_vmax;
     __pyx_t_6 = __pyx_t_5;
@@ -2596,9 +2596,9 @@ static void __pyx_f_15cython_iterator_iterate(PyArrayObject *__pyx_v_cy_board_o,
       /* "cython_iterator.pyx":19
  *     for i in range(1, hmax):
  *         for j in range(1, vmax):
- *             c = o_view[i-1, j-1] + o_view[i-1, j] + o_view[i-1, j+1] + o_view[i, j-1] + o_view[i, j+1] + o_view[i+1, j-1] + o_view[i+1, j] + o_view[i+1, j+1]             # <<<<<<<<<<<<<<
- *             if (c == 3) : n_view[i, j] = 1
- *             elif (c == 2) : n_view[i, j] = o_view[i, j]
+ *             c = c_[i-1, j-1] + c_[i-1, j] + c_[i-1, j+1] + c_[i, j-1] + c_[i, j+1] + c_[i+1, j-1] + c_[i+1, j] + c_[i+1, j+1]             # <<<<<<<<<<<<<<
+ *             if (c == 3) : n_[i, j] = 1
+ *             elif (c == 2) : n_[i, j] = c_[i, j]
  */
       __pyx_t_8 = (__pyx_v_i - 1);
       __pyx_t_9 = (__pyx_v_j - 1);
@@ -2616,34 +2616,34 @@ static void __pyx_f_15cython_iterator_iterate(PyArrayObject *__pyx_v_cy_board_o,
       __pyx_t_21 = __pyx_v_j;
       __pyx_t_22 = (__pyx_v_i + 1);
       __pyx_t_23 = (__pyx_v_j + 1);
-      __pyx_v_c = ((((((((*((unsigned char *) ( /* dim=1 */ ((char *) (((unsigned char *) ( /* dim=0 */ (__pyx_v_o_view.data + __pyx_t_8 * __pyx_v_o_view.strides[0]) )) + __pyx_t_9)) ))) + (*((unsigned char *) ( /* dim=1 */ ((char *) (((unsigned char *) ( /* dim=0 */ (__pyx_v_o_view.data + __pyx_t_10 * __pyx_v_o_view.strides[0]) )) + __pyx_t_11)) )))) + (*((unsigned char *) ( /* dim=1 */ ((char *) (((unsigned char *) ( /* dim=0 */ (__pyx_v_o_view.data + __pyx_t_12 * __pyx_v_o_view.strides[0]) )) + __pyx_t_13)) )))) + (*((unsigned char *) ( /* dim=1 */ ((char *) (((unsigned char *) ( /* dim=0 */ (__pyx_v_o_view.data + __pyx_t_14 * __pyx_v_o_view.strides[0]) )) + __pyx_t_15)) )))) + (*((unsigned char *) ( /* dim=1 */ ((char *) (((unsigned char *) ( /* dim=0 */ (__pyx_v_o_view.data + __pyx_t_16 * __pyx_v_o_view.strides[0]) )) + __pyx_t_17)) )))) + (*((unsigned char *) ( /* dim=1 */ ((char *) (((unsigned char *) ( /* dim=0 */ (__pyx_v_o_view.data + __pyx_t_18 * __pyx_v_o_view.strides[0]) )) + __pyx_t_19)) )))) + (*((unsigned char *) ( /* dim=1 */ ((char *) (((unsigned char *) ( /* dim=0 */ (__pyx_v_o_view.data + __pyx_t_20 * __pyx_v_o_view.strides[0]) )) + __pyx_t_21)) )))) + (*((unsigned char *) ( /* dim=1 */ ((char *) (((unsigned char *) ( /* dim=0 */ (__pyx_v_o_view.data + __pyx_t_22 * __pyx_v_o_view.strides[0]) )) + __pyx_t_23)) ))));
+      __pyx_v_c = ((((((((*((unsigned char *) ( /* dim=1 */ ((char *) (((unsigned char *) ( /* dim=0 */ (__pyx_v_c_.data + __pyx_t_8 * __pyx_v_c_.strides[0]) )) + __pyx_t_9)) ))) + (*((unsigned char *) ( /* dim=1 */ ((char *) (((unsigned char *) ( /* dim=0 */ (__pyx_v_c_.data + __pyx_t_10 * __pyx_v_c_.strides[0]) )) + __pyx_t_11)) )))) + (*((unsigned char *) ( /* dim=1 */ ((char *) (((unsigned char *) ( /* dim=0 */ (__pyx_v_c_.data + __pyx_t_12 * __pyx_v_c_.strides[0]) )) + __pyx_t_13)) )))) + (*((unsigned char *) ( /* dim=1 */ ((char *) (((unsigned char *) ( /* dim=0 */ (__pyx_v_c_.data + __pyx_t_14 * __pyx_v_c_.strides[0]) )) + __pyx_t_15)) )))) + (*((unsigned char *) ( /* dim=1 */ ((char *) (((unsigned char *) ( /* dim=0 */ (__pyx_v_c_.data + __pyx_t_16 * __pyx_v_c_.strides[0]) )) + __pyx_t_17)) )))) + (*((unsigned char *) ( /* dim=1 */ ((char *) (((unsigned char *) ( /* dim=0 */ (__pyx_v_c_.data + __pyx_t_18 * __pyx_v_c_.strides[0]) )) + __pyx_t_19)) )))) + (*((unsigned char *) ( /* dim=1 */ ((char *) (((unsigned char *) ( /* dim=0 */ (__pyx_v_c_.data + __pyx_t_20 * __pyx_v_c_.strides[0]) )) + __pyx_t_21)) )))) + (*((unsigned char *) ( /* dim=1 */ ((char *) (((unsigned char *) ( /* dim=0 */ (__pyx_v_c_.data + __pyx_t_22 * __pyx_v_c_.strides[0]) )) + __pyx_t_23)) ))));
 
       /* "cython_iterator.pyx":20
  *         for j in range(1, vmax):
- *             c = o_view[i-1, j-1] + o_view[i-1, j] + o_view[i-1, j+1] + o_view[i, j-1] + o_view[i, j+1] + o_view[i+1, j-1] + o_view[i+1, j] + o_view[i+1, j+1]
- *             if (c == 3) : n_view[i, j] = 1             # <<<<<<<<<<<<<<
- *             elif (c == 2) : n_view[i, j] = o_view[i, j]
- *     o_view[:] = n_view
+ *             c = c_[i-1, j-1] + c_[i-1, j] + c_[i-1, j+1] + c_[i, j-1] + c_[i, j+1] + c_[i+1, j-1] + c_[i+1, j] + c_[i+1, j+1]
+ *             if (c == 3) : n_[i, j] = 1             # <<<<<<<<<<<<<<
+ *             elif (c == 2) : n_[i, j] = c_[i, j]
+ *     c_[:] = n_
  */
       switch (__pyx_v_c) {
         case 3:
         __pyx_t_24 = __pyx_v_i;
         __pyx_t_25 = __pyx_v_j;
-        *((unsigned char *) ( /* dim=1 */ ((char *) (((unsigned char *) ( /* dim=0 */ (__pyx_v_n_view.data + __pyx_t_24 * __pyx_v_n_view.strides[0]) )) + __pyx_t_25)) )) = 1;
+        *((unsigned char *) ( /* dim=1 */ ((char *) (((unsigned char *) ( /* dim=0 */ (__pyx_v_n_.data + __pyx_t_24 * __pyx_v_n_.strides[0]) )) + __pyx_t_25)) )) = 1;
         break;
         case 2:
 
         /* "cython_iterator.pyx":21
- *             c = o_view[i-1, j-1] + o_view[i-1, j] + o_view[i-1, j+1] + o_view[i, j-1] + o_view[i, j+1] + o_view[i+1, j-1] + o_view[i+1, j] + o_view[i+1, j+1]
- *             if (c == 3) : n_view[i, j] = 1
- *             elif (c == 2) : n_view[i, j] = o_view[i, j]             # <<<<<<<<<<<<<<
- *     o_view[:] = n_view
+ *             c = c_[i-1, j-1] + c_[i-1, j] + c_[i-1, j+1] + c_[i, j-1] + c_[i, j+1] + c_[i+1, j-1] + c_[i+1, j] + c_[i+1, j+1]
+ *             if (c == 3) : n_[i, j] = 1
+ *             elif (c == 2) : n_[i, j] = c_[i, j]             # <<<<<<<<<<<<<<
+ *     c_[:] = n_
  */
         __pyx_t_26 = __pyx_v_i;
         __pyx_t_27 = __pyx_v_j;
         __pyx_t_28 = __pyx_v_i;
         __pyx_t_29 = __pyx_v_j;
-        *((unsigned char *) ( /* dim=1 */ ((char *) (((unsigned char *) ( /* dim=0 */ (__pyx_v_n_view.data + __pyx_t_28 * __pyx_v_n_view.strides[0]) )) + __pyx_t_29)) )) = (*((unsigned char *) ( /* dim=1 */ ((char *) (((unsigned char *) ( /* dim=0 */ (__pyx_v_o_view.data + __pyx_t_26 * __pyx_v_o_view.strides[0]) )) + __pyx_t_27)) )));
+        *((unsigned char *) ( /* dim=1 */ ((char *) (((unsigned char *) ( /* dim=0 */ (__pyx_v_n_.data + __pyx_t_28 * __pyx_v_n_.strides[0]) )) + __pyx_t_29)) )) = (*((unsigned char *) ( /* dim=1 */ ((char *) (((unsigned char *) ( /* dim=0 */ (__pyx_v_c_.data + __pyx_t_26 * __pyx_v_c_.strides[0]) )) + __pyx_t_27)) )));
         break;
         default: break;
       }
@@ -2651,18 +2651,18 @@ static void __pyx_f_15cython_iterator_iterate(PyArrayObject *__pyx_v_cy_board_o,
   }
 
   /* "cython_iterator.pyx":22
- *             if (c == 3) : n_view[i, j] = 1
- *             elif (c == 2) : n_view[i, j] = o_view[i, j]
- *     o_view[:] = n_view             # <<<<<<<<<<<<<<
+ *             if (c == 3) : n_[i, j] = 1
+ *             elif (c == 2) : n_[i, j] = c_[i, j]
+ *     c_[:] = n_             # <<<<<<<<<<<<<<
  */
-  if (unlikely(__pyx_memoryview_copy_contents(__pyx_v_n_view, __pyx_v_o_view, 2, 2, 0) < 0)) __PYX_ERR(0, 22, __pyx_L1_error)
+  if (unlikely(__pyx_memoryview_copy_contents(__pyx_v_n_, __pyx_v_c_, 2, 2, 0) < 0)) __PYX_ERR(0, 22, __pyx_L1_error)
 
   /* "cython_iterator.pyx":8
  * @cython.wraparound(False)
  * @cython.initializedcheck(False)
- * cpdef void iterate(np.ndarray cy_board_o, np.ndarray cy_board_n):             # <<<<<<<<<<<<<<
- *     cdef unsigned char [:, ::1] o_view = cy_board_o
- *     cdef unsigned char [:, ::1] n_view = cy_board_n
+ * cpdef void iterate(np.ndarray cur_board, np.ndarray new_board):             # <<<<<<<<<<<<<<
+ *     cdef unsigned char [:, ::1] c_ = cur_board
+ *     cdef unsigned char [:, ::1] n_ = new_board
  */
 
   /* function exit code */
@@ -2671,21 +2671,21 @@ static void __pyx_f_15cython_iterator_iterate(PyArrayObject *__pyx_v_cy_board_o,
   __PYX_XDEC_MEMVIEW(&__pyx_t_1, 1);
   __Pyx_WriteUnraisable("cython_iterator.iterate", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
   __pyx_L0:;
-  __PYX_XDEC_MEMVIEW(&__pyx_v_o_view, 1);
-  __PYX_XDEC_MEMVIEW(&__pyx_v_n_view, 1);
+  __PYX_XDEC_MEMVIEW(&__pyx_v_c_, 1);
+  __PYX_XDEC_MEMVIEW(&__pyx_v_n_, 1);
   __Pyx_RefNannyFinishContext();
 }
 
 /* Python wrapper */
 static PyObject *__pyx_pw_15cython_iterator_1iterate(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
 static PyObject *__pyx_pw_15cython_iterator_1iterate(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
-  PyArrayObject *__pyx_v_cy_board_o = 0;
-  PyArrayObject *__pyx_v_cy_board_n = 0;
+  PyArrayObject *__pyx_v_cur_board = 0;
+  PyArrayObject *__pyx_v_new_board = 0;
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("iterate (wrapper)", 0);
   {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_cy_board_o,&__pyx_n_s_cy_board_n,0};
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_cur_board,&__pyx_n_s_new_board,0};
     PyObject* values[2] = {0,0};
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
@@ -2701,11 +2701,11 @@ static PyObject *__pyx_pw_15cython_iterator_1iterate(PyObject *__pyx_self, PyObj
       kw_args = PyDict_Size(__pyx_kwds);
       switch (pos_args) {
         case  0:
-        if (likely((values[0] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_cy_board_o)) != 0)) kw_args--;
+        if (likely((values[0] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_cur_board)) != 0)) kw_args--;
         else goto __pyx_L5_argtuple_error;
         CYTHON_FALLTHROUGH;
         case  1:
-        if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_cy_board_n)) != 0)) kw_args--;
+        if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_new_board)) != 0)) kw_args--;
         else {
           __Pyx_RaiseArgtupleInvalid("iterate", 1, 2, 2, 1); __PYX_ERR(0, 8, __pyx_L3_error)
         }
@@ -2719,8 +2719,8 @@ static PyObject *__pyx_pw_15cython_iterator_1iterate(PyObject *__pyx_self, PyObj
       values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
     }
-    __pyx_v_cy_board_o = ((PyArrayObject *)values[0]);
-    __pyx_v_cy_board_n = ((PyArrayObject *)values[1]);
+    __pyx_v_cur_board = ((PyArrayObject *)values[0]);
+    __pyx_v_new_board = ((PyArrayObject *)values[1]);
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
@@ -2730,9 +2730,9 @@ static PyObject *__pyx_pw_15cython_iterator_1iterate(PyObject *__pyx_self, PyObj
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_cy_board_o), __pyx_ptype_5numpy_ndarray, 1, "cy_board_o", 0))) __PYX_ERR(0, 8, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_cy_board_n), __pyx_ptype_5numpy_ndarray, 1, "cy_board_n", 0))) __PYX_ERR(0, 8, __pyx_L1_error)
-  __pyx_r = __pyx_pf_15cython_iterator_iterate(__pyx_self, __pyx_v_cy_board_o, __pyx_v_cy_board_n);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_cur_board), __pyx_ptype_5numpy_ndarray, 1, "cur_board", 0))) __PYX_ERR(0, 8, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_new_board), __pyx_ptype_5numpy_ndarray, 1, "new_board", 0))) __PYX_ERR(0, 8, __pyx_L1_error)
+  __pyx_r = __pyx_pf_15cython_iterator_iterate(__pyx_self, __pyx_v_cur_board, __pyx_v_new_board);
 
   /* function exit code */
   goto __pyx_L0;
@@ -2743,13 +2743,13 @@ static PyObject *__pyx_pw_15cython_iterator_1iterate(PyObject *__pyx_self, PyObj
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_15cython_iterator_iterate(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_cy_board_o, PyArrayObject *__pyx_v_cy_board_n) {
+static PyObject *__pyx_pf_15cython_iterator_iterate(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_cur_board, PyArrayObject *__pyx_v_new_board) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("iterate", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_void_to_None(__pyx_f_15cython_iterator_iterate(__pyx_v_cy_board_o, __pyx_v_cy_board_n, 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 8, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_void_to_None(__pyx_f_15cython_iterator_iterate(__pyx_v_cur_board, __pyx_v_new_board, 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 8, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -18763,8 +18763,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_cline_in_traceback, __pyx_k_cline_in_traceback, sizeof(__pyx_k_cline_in_traceback), 0, 0, 1, 1},
   {&__pyx_kp_s_contiguous_and_direct, __pyx_k_contiguous_and_direct, sizeof(__pyx_k_contiguous_and_direct), 0, 0, 1, 0},
   {&__pyx_kp_s_contiguous_and_indirect, __pyx_k_contiguous_and_indirect, sizeof(__pyx_k_contiguous_and_indirect), 0, 0, 1, 0},
-  {&__pyx_n_s_cy_board_n, __pyx_k_cy_board_n, sizeof(__pyx_k_cy_board_n), 0, 0, 1, 1},
-  {&__pyx_n_s_cy_board_o, __pyx_k_cy_board_o, sizeof(__pyx_k_cy_board_o), 0, 0, 1, 1},
+  {&__pyx_n_s_cur_board, __pyx_k_cur_board, sizeof(__pyx_k_cur_board), 0, 0, 1, 1},
   {&__pyx_n_s_dict, __pyx_k_dict, sizeof(__pyx_k_dict), 0, 0, 1, 1},
   {&__pyx_n_s_dtype_is_object, __pyx_k_dtype_is_object, sizeof(__pyx_k_dtype_is_object), 0, 0, 1, 1},
   {&__pyx_n_s_encode, __pyx_k_encode, sizeof(__pyx_k_encode), 0, 0, 1, 1},
@@ -18789,6 +18788,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_kp_u_ndarray_is_not_Fortran_contiguou, __pyx_k_ndarray_is_not_Fortran_contiguou, sizeof(__pyx_k_ndarray_is_not_Fortran_contiguou), 0, 1, 0, 0},
   {&__pyx_n_s_ndim, __pyx_k_ndim, sizeof(__pyx_k_ndim), 0, 0, 1, 1},
   {&__pyx_n_s_new, __pyx_k_new, sizeof(__pyx_k_new), 0, 0, 1, 1},
+  {&__pyx_n_s_new_board, __pyx_k_new_board, sizeof(__pyx_k_new_board), 0, 0, 1, 1},
   {&__pyx_kp_s_no_default___reduce___due_to_non, __pyx_k_no_default___reduce___due_to_non, sizeof(__pyx_k_no_default___reduce___due_to_non), 0, 0, 1, 0},
   {&__pyx_n_s_np, __pyx_k_np, sizeof(__pyx_k_np), 0, 0, 1, 1},
   {&__pyx_n_s_numpy, __pyx_k_numpy, sizeof(__pyx_k_numpy), 0, 0, 1, 1},
@@ -19563,9 +19563,9 @@ if (!__Pyx_RefNanny) {
   /* "cython_iterator.pyx":8
  * @cython.wraparound(False)
  * @cython.initializedcheck(False)
- * cpdef void iterate(np.ndarray cy_board_o, np.ndarray cy_board_n):             # <<<<<<<<<<<<<<
- *     cdef unsigned char [:, ::1] o_view = cy_board_o
- *     cdef unsigned char [:, ::1] n_view = cy_board_n
+ * cpdef void iterate(np.ndarray cur_board, np.ndarray new_board):             # <<<<<<<<<<<<<<
+ *     cdef unsigned char [:, ::1] c_ = cur_board
+ *     cdef unsigned char [:, ::1] n_ = new_board
  */
   __pyx_t_1 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);

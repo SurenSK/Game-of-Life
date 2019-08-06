@@ -39,6 +39,7 @@ BOARD_W, BOARD_H = (0, 2)[TOROIDAL_ENV] + SCREEN_W // SCALE, (0, 2)[TOROIDAL_ENV
 board = np.ascontiguousarray(np.random.choice(a=[0, 1], size=(BOARD_W, BOARD_H), p=[1 - INI_P, INI_P]), dtype=np.uint8)
 buffer = np.ascontiguousarray(np.empty_like(board))
 
+
 def step_toroidal_moore_cy():
     global board
     if TOROIDAL_ENV:
@@ -65,7 +66,7 @@ def draw_board():
 def profile_function(function, n_trials=3, n_per_trial=10):
     times = timeit.repeat(setup="from __main__ import " + function, stmt=function+"()",
                           repeat=n_trials, number=n_per_trial)
-    print("Frame {:3d} : {:24s} ~{:.2f}ms".format(completed_frames, function+"()", 1000 * min(times)/n_per_trial))
+    print("Frame {:3d} : {:24s} ~{:.2f}ms".format(current_frame_n, function + "()", 1000 * min(times) / n_per_trial))
 
 
 def empty_region_print(max_window_w):
@@ -96,7 +97,7 @@ def generate_frame(c_frame_n):
     return c_frame_n + 1
 
 
-completed_frames = 1
+current_frame_n = 1
 required_frames = 1000
 
 time_init_end = time.time()
@@ -104,19 +105,19 @@ print("Total Initialization...  {:.0f}ms".format(1000 * (time_init_end - time_in
 print("\nCore-loop clock starting...")
 time_start = time.time()
 done = False
-while not done and completed_frames < required_frames:
+while not done and not current_frame_n > required_frames:
     for event in pygame.event.get():
         done = True if event.type == pygame.QUIT else False
         # if event.type == pygame.MOUSEBUTTONDOWN:
             # completed_frames = generate_frame(completed_frames)
 
-    completed_frames = generate_frame(completed_frames)
+    current_frame_n = generate_frame(current_frame_n)
     clock.tick()
 
 time_end = time.time()
 print("Core-loop clock stopped...\n")
 print("Runtime {:.0f}s".format(time_end - time_start))
-print("#Frames ", completed_frames)
-print("Avg. {:.2f}ms Frametime".format(1000 * (time_end - time_start) / completed_frames))
-print("Avg. {:.2f}FPS".format(completed_frames / (time_end - time_start)))
+print("#Frames ", current_frame_n)
+print("Avg. {:.2f}ms Frametime".format(1000 * (time_end - time_start) / current_frame_n))
+print("Avg. {:.2f}FPS".format(current_frame_n / (time_end - time_start)))
 print("\nExiting...")
