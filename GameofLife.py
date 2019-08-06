@@ -7,13 +7,19 @@ from pygame.locals import *
 import numpy as np
 from scipy import signal
 from scipy import ndimage
+
 from distutils.core import setup
 from Cython.Build import cythonize
+from distutils.extension import Extension
+from Cython.Distutils import build_ext
 
 print("Starting init...\n")
 time_init_start = time.time()
 
-setup(ext_modules=cythonize("cython_iterator.pyx"), include_dirs=[np.get_include()])
+ext_modules = [Extension("cython_iterator", ["cython_iterator.pyx"],
+                         extra_compile_args=["/openmp"],
+                         extra_link_args=['/openmp'])]
+setup(include_dirs=[np.get_include()], ext_modules=cythonize(ext_modules))
 import cython_iterator as cy
 
 print("Cython build complete... {:.0f}ms".format((time.time() - time_init_start)*1000))
