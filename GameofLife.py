@@ -96,16 +96,15 @@ def status_print(frame_n: int) -> None:
 def generate_frame():
     global c_frame_n
     flag = c_frame_n % 2
-    dst_f = (0, 1)[flag]
-    src_f = (1, 0)[flag]
-    pygame.surfarray.blit_array(screen, cy.iterate_get_screen_v2(board_c, dst_f, src_f))
+    cy.iterate_get_screen_v2(board_c, flag)
+    pygame.surfarray.blit_array(screen, board_c[flag, 1:-1, 1:-1])
     pygame.display.update()
     status_print(c_frame_n) if c_frame_n % (required_frames // num_reports) == 0 else None
     c_frame_n += 1
 
 
 c_frame_n = 1
-required_frames = 5000
+required_frames = 10000
 num_reports = 20
 
 time_init_end = time.time()
