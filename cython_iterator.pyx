@@ -1,22 +1,20 @@
-import numpy as np
 cimport numpy as np
 cimport cython
+import numpy as np
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
 @cython.initializedcheck(False)
-cpdef void iterate(np.ndarray cur_board, np.ndarray new_board):
-    cdef unsigned char [:, ::1] c_ = cur_board
-    cdef unsigned char [:, ::1] n_ = new_board
-    cdef int hmax = cur_board.shape[0]-1
-    cdef int vmax = cur_board.shape[1]-1
-    cdef int i, j, c
-
-    n_[:] = 0
-
-    for i in range(1, hmax):
-        for j in range(1, vmax):
-            c = c_[i-1, j-1] + c_[i-1, j] + c_[i-1, j+1] + c_[i, j-1] + c_[i, j+1] + c_[i+1, j-1] + c_[i+1, j] + c_[i+1, j+1]
-            if (c == 3) : n_[i, j] = 1
-            elif (c == 2) : n_[i, j] = c_[i, j]
-    c_[:] = n_
+cpdef void iterate_v2(np.ndarray board, int c_frame_n):
+    cdef unsigned char [:, :, ::1] b_ = board
+    cdef unsigned char dst = (c_frame_n+1) % 2
+    cdef unsigned char src = c_frame_n % 2
+    cdef int h = board.shape[1]-1
+    cdef int v = board.shape[2]-1
+    cdef int i, j, n
+    b_[dst,:,:]=0
+    for i in range(1, h):
+        for j in range(1, v):
+            n = b_[src, i-1, j-1] + b_[src, i-1, j] + b_[src, i-1, j+1] + b_[src, i, j-1] + b_[src, i, j+1] + b_[src, i+1, j-1] + b_[src, i+1, j] + b_[src, i+1, j+1]
+            if n==3: b_[dst, i, j] = 1
+            elif n==2: b_[dst, i, j] = b_[src, i, j]
