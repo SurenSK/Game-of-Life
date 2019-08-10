@@ -1,17 +1,11 @@
-import math
-import random
 import time
 import timeit
 import pygame
-from pygame.locals import *
 import numpy as np
-from scipy import signal
-from scipy import ndimage
 
 from distutils.core import setup
 from Cython.Build import cythonize
 from distutils.extension import Extension
-from Cython.Distutils import build_ext
 
 print("Starting init...\n")
 time_init_start = time.time()
@@ -44,6 +38,7 @@ pygame.display.set_palette([OFF_COLOR]+[ON_COLOR]+[GRAY]+[RED]+[GREEN]+[BLUE])
 BOARD_W, BOARD_H = (0, 2)[TOROIDAL_ENV] + SCREEN_W // SCALE, (0, 2)[TOROIDAL_ENV] + SCREEN_H // SCALE
 board_c = np.ascontiguousarray(np.random.choice(a=[0, 1], size=(2, BOARD_W, BOARD_H), p=[1 - P_0, P_0]), dtype=np.uint8)
 
+
 def step_toroidal_moore_cy():
     #if TOROIDAL_ENV:
     #    board_0[0, :] = board_0[-2, :]
@@ -56,6 +51,7 @@ def step_toroidal_moore_cy():
 def draw_board():
     # # # Some sort of buffer thing going on, double flipping makes a huge visual difference in fluidity
     # # Actually its probably just some sort of resonance between simulated FPS and monitor refresh-rate
+    # # In retrospect the improvement in perceived fluidity were probably from the lower FPS no longer being resonant
     # # # Get screen pixels as arr, xor with disp arr or board or whatever, draw points that changed?
     # # Only manage ~3k pixels with draw rects for the cost of blit_arr(1920*1080)
     # # Pixelarray would just be even slower than blit_array?
@@ -121,8 +117,7 @@ done = False
 while not done and not c_frame_n > required_frames:
     for event in pygame.event.get():
         done = True if event.type == pygame.QUIT else False
-        # if event.type == pygame.MOUSEBUTTONDOWN:
-            # completed_frames = generate_frame(completed_frames)
+        # generate_frame() if event.type == pygame.MOUSEBUTTONDOWN else None
     generate_frame()
     clock.tick()
 
