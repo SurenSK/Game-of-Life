@@ -37,7 +37,7 @@ screen.set_alpha(None)
 pygame.display.set_palette([OFF_COLOR]+[ON_COLOR]+[GRAY]+[RED]+[GREEN]+[BLUE])
 
 BOARD_W, BOARD_H = (0, 2)[TOROIDAL_ENV] + SCREEN_W // SCALE, (0, 2)[TOROIDAL_ENV] + SCREEN_H // SCALE
-board_c = np.ascontiguousarray(np.random.choice(a=[0, 1], size=(2, BOARD_W, BOARD_H), p=[1 - P_0, P_0]), dtype=np.uint8)
+c_board = np.ascontiguousarray(np.random.choice(a=[0, 1], size=(2, BOARD_W, BOARD_H), p=[1 - P_0, P_0]), dtype=np.uint8)
 
 count_over_2ms = 0
 
@@ -56,31 +56,30 @@ def step_toroidal_moore_cy():
     #    board_0[-1, :] = board_0[1, :]
     #    board_0[:, -1] = board_0[:, 1]
     #    board_0[:, 0] = board_0[:, -2]
-    cy.iterate(board_c, c_frame_n)
+    cy.iterate(c_board, c_frame)
 
 
 def draw_board():
     # # # Some sort of buffer thing going on, double flipping makes a huge visual difference in fluidity
     # # Actually its probably just some sort of resonance between simulated FPS and monitor refresh-rate
-    # # In retrospect the improvement in perceived fluidity were probably from the lower FPS no longer being resonant
-    # # # Get screen pixels as arr, xor with disp arr or board or whatever, draw points that changed?
-    # # Only manage ~3k pixels with draw rects for the cost of blit_arr(1920*1080)
+    # # In retrospect the improvement in perceived fluidity was probably from the lower FPS no longer being resonant
+    # # # Get screen pixels as arr, xor with disp arr or board or whatever, only draw points that changed?
+    # # Can only manage ~3k pixels with draw rects for the cost of blit_arr(1920*1080)
     # # Pixelarray would just be even slower than blit_array?
     # Only if every single pixel is changed?
-    # disp_arr = (board_0, board_0[1:-1, 1:-1])[TOROIDAL_ENV]
-    active_layer = c_frame_n % 2
-    disp_arr = (board_c[active_layer, :, :], board_c[active_layer, 1:-1, 1:-1])[TOROIDAL_ENV]
+    active_layer = c_frame % 2
+    disp_arr = (c_board[active_layer, :, :], c_board[active_layer, 1:-1, 1:-1])[TOROIDAL_ENV]
     pygame.surfarray.blit_array(screen, disp_arr if SCALE == 1 else
                                 np.repeat(np.repeat(disp_arr, SCALE, axis=0), SCALE, axis=1))
     pygame.display.update()
 
 
 def blit_func():
-    pygame.surfarray.blit_array(screen, board_c[0, 1:-1, 1:-1])
+    pygame.surfarray.blit_array(screen, c_board[0, 1:-1, 1:-1])
 
 
 def write_func():
-    screen_raw_buffer.write(np.ascontiguousarray(board_c[0, 1:-1, 1:-1]))
+    screen_raw_buffer.write(np.ascontiguousarray(c_board[0, 1:-1, 1:-1]))
 
 
 def profile_function(function, n_trials=3, n_per_trial=10):
@@ -89,13 +88,13 @@ def profile_function(function, n_trials=3, n_per_trial=10):
                           repeat=n_trials, number=n_per_trial)
     runtime_ms = 1000 * (min(times) / n_per_trial)
     count_over_2ms += 1 if runtime_ms > 2 else 0
-    print("Frame {:3d} : {:12s} ~{:.2f}ms : {:.0f}% Over 2ms".format(c_frame_n, function + "()", runtime_ms, 100*count_over_2ms/c_frame_n))
+    print("Frame {:3d} : {:12s} ~{:.2f}ms : {:.0f}% Over 2ms".format(c_frame, function + "()", runtime_ms, 100 * count_over_2ms / c_frame))
 
 
 def empty_region_print(max_window_w):
     print("Empty NxN Ratios:")
-    active_layer = c_frame_n % 2
-    wide_count = board_c[active_layer, 1:-1, 1:-1].copy()
+    active_layer = c_frame % 2
+    wide_count = c_board[active_layer, 1:-1, 1:-1].copy()
     empty_ratio = np.bincount(wide_count.ravel())[0] / ((BOARD_W - 1) * (SCREEN_H - 1))
     print("\t 3x3\t{:.2f}".format(empty_ratio))
     for window_w in range(5, max_window_w+1, 2):
@@ -117,17 +116,17 @@ def status_print(frame_n: int) -> None:
 
 
 def generate_frame():
-    global c_frame_n
-    flag = c_frame_n % 2
-    cy.iterate(board_c, flag)
-    # pygame.surfarray.blit_array(screen, board_c[flag, 1:-1, 1:-1])
-    # pygame.display.update()
-    status_print(c_frame_n) if c_frame_n % (required_frames // num_reports) == 0 else None
-    c_frame_n += 1
+    global c_frame
+    flag = c_frame % 2
+    cy.iterate_singlethread(c_board, flag)
+    pygame.surfarray.blit_array(screen, c_board[flag, 1:-1, 1:-1])
+    pygame.display.update()
+    status_print(c_frame) if c_frame % (required_frames // num_reports) == 0 else None
+    c_frame += 1
 
 
 screen_raw_buffer = screen.get_buffer()
-c_frame_n = 1
+c_frame = 1
 required_frames = 10000
 num_reports = 20
 
@@ -137,7 +136,7 @@ print("\nCore-loop clock starting...")
 time_chunk_start = time.time()
 time_start = time.time()
 done = False
-while not done and not c_frame_n > required_frames:
+while not done and not c_frame > required_frames:
 # while not done:
     for event in pygame.event.get():
         done = True if event.type == pygame.QUIT else False
@@ -145,11 +144,11 @@ while not done and not c_frame_n > required_frames:
     generate_frame()
     clock.tick()
 
-c_frame_n -= 1
+c_frame -= 1
 time_end = time.time()
 print("Core-loop clock stopped...\n")
 print("Runtime {:.0f}s".format(time_end - time_start))
-print("#Frames ", c_frame_n)
-print("Avg. {:.2f}ms Frametime".format(1000 * (time_end - time_start) / c_frame_n))
-print("Avg. {:.2f}FPS".format(c_frame_n / (time_end - time_start)))
+print("#Frames ", c_frame)
+print("Avg. {:.2f}ms Frametime".format(1000 * (time_end - time_start) / c_frame))
+print("Avg. {:.2f}FPS".format(c_frame / (time_end - time_start)))
 print("\nExiting...")
