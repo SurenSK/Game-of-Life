@@ -120,8 +120,8 @@ def generate_frame():
     global c_frame_n
     flag = c_frame_n % 2
     cy.iterate(board_c, flag)
-    #pygame.surfarray.blit_array(screen, board_c[flag, 1:-1, 1:-1])
-    #pygame.display.update()
+    # pygame.surfarray.blit_array(screen, board_c[flag, 1:-1, 1:-1])
+    # pygame.display.update()
     status_print(c_frame_n) if c_frame_n % (required_frames // num_reports) == 0 else None
     c_frame_n += 1
 
