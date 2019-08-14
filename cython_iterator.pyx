@@ -21,6 +21,7 @@ cdef enum:
 
 cpdef void iterate(np.uint8_t [:, :, ::1] b_, np.uint8_t flag):
 	cdef Py_ssize_t i, j
+	cdef int n
 
 	#~0.15ms to 0.20ms to wrap
 	b_[:,0,:]=b_[:,wn,:]
@@ -31,12 +32,14 @@ cpdef void iterate(np.uint8_t [:, :, ::1] b_, np.uint8_t flag):
 	if flag == 0:
 		for i in prange(1, w, nogil=True, schedule='guided', num_threads=12, chunksize=3):
 			for j in range(1, h):
-				if (b_[0, i-1, j-1] + b_[0, i-1, j] + b_[0, i-1, j+1] + b_[0, i, j-1] + b_[0, i, j+1] + b_[0, i+1, j-1] + b_[0, i+1, j] + b_[0, i+1, j+1]) == 2: b_[1, i, j] = b_[0, i, j]
-				elif (b_[0, i-1, j-1] + b_[0, i-1, j] + b_[0, i-1, j+1] + b_[0, i, j-1] + b_[0, i, j+1] + b_[0, i+1, j-1] + b_[0, i+1, j] + b_[0, i+1, j+1]) == 3: b_[1, i, j] = 1
+				n = (b_[0, i-1, j-1] + b_[0, i-1, j] + b_[0, i-1, j+1] + b_[0, i, j-1] + b_[0, i, j+1] + b_[0, i+1, j-1] + b_[0, i+1, j] + b_[0, i+1, j+1])
+				if  n == 2: b_[1, i, j] = b_[0, i, j]
+				elif n == 3: b_[1, i, j] = 1
 				else : b_[1, i, j] = 0
 	else:
 		for i in prange(1, w, nogil=True, schedule='guided', num_threads=12, chunksize=3):
 			for j in range(1, h):
-				if (b_[1, i-1, j-1] + b_[1, i-1, j] + b_[1, i-1, j+1] + b_[1, i, j-1] + b_[1, i, j+1] + b_[1, i+1, j-1] + b_[1, i+1, j] + b_[1, i+1, j+1]) == 2: b_[0, i, j] = b_[1, i, j]
-				elif (b_[1, i-1, j-1] + b_[1, i-1, j] + b_[1, i-1, j+1] + b_[1, i, j-1] + b_[1, i, j+1] + b_[1, i+1, j-1] + b_[1, i+1, j] + b_[1, i+1, j+1]) == 3: b_[0, i, j] = 1
+				n = (b_[1, i-1, j-1] + b_[1, i-1, j] + b_[1, i-1, j+1] + b_[1, i, j-1] + b_[1, i, j+1] + b_[1, i+1, j-1] + b_[1, i+1, j] + b_[1, i+1, j+1])
+				if n == 2: b_[0, i, j] = b_[1, i, j]
+				elif n == 3: b_[0, i, j] = 1
 				else : b_[0, i, j] = 0
