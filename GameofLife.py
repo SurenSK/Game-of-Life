@@ -2,10 +2,11 @@ import time
 import timeit
 import pygame
 import numpy as np
-
+import ctypes
 from distutils.core import setup
 from Cython.Build import cythonize
 from distutils.extension import Extension
+import cProfile
 
 print("Starting init...\n")
 time_init_start = time.time()
@@ -38,6 +39,16 @@ pygame.display.set_palette([OFF_COLOR]+[ON_COLOR]+[GRAY]+[RED]+[GREEN]+[BLUE])
 BOARD_W, BOARD_H = (0, 2)[TOROIDAL_ENV] + SCREEN_W // SCALE, (0, 2)[TOROIDAL_ENV] + SCREEN_H // SCALE
 board_c = np.ascontiguousarray(np.random.choice(a=[0, 1], size=(2, BOARD_W, BOARD_H), p=[1 - P_0, P_0]), dtype=np.uint8)
 
+count_over_2ms = 0
+
+
+def ctypes_test():
+    NUM = 167
+    fun = ctypes.CDLL("some_c.so")
+    fun.myFunction.argtypes = [ctypes.c_int]
+    returnVal = fun.myFunction(NUM)
+    print(returnVal)
+
 
 def step_toroidal_moore_cy():
     #if TOROIDAL_ENV:
@@ -64,10 +75,21 @@ def draw_board():
     pygame.display.update()
 
 
+def blit_func():
+    pygame.surfarray.blit_array(screen, board_c[0, 1:-1, 1:-1])
+
+
+def write_func():
+    screen_raw_buffer.write(np.ascontiguousarray(board_c[0, 1:-1, 1:-1]))
+
+
 def profile_function(function, n_trials=3, n_per_trial=10):
+    global count_over_2ms
     times = timeit.repeat(setup="from __main__ import " + function, stmt=function+"()",
                           repeat=n_trials, number=n_per_trial)
-    print("Frame {:3d} : {:24s} ~{:.2f}ms".format(c_frame_n, function + "()", 1000 * min(times) / n_per_trial))
+    runtime_ms = 1000 * (min(times) / n_per_trial)
+    count_over_2ms += 1 if runtime_ms > 2 else 0
+    print("Frame {:3d} : {:12s} ~{:.2f}ms : {:.0f}% Over 2ms".format(c_frame_n, function + "()", runtime_ms, 100*count_over_2ms/c_frame_n))
 
 
 def empty_region_print(max_window_w):
@@ -98,12 +120,13 @@ def generate_frame():
     global c_frame_n
     flag = c_frame_n % 2
     cy.iterate(board_c, flag)
-    pygame.surfarray.blit_array(screen, board_c[flag, 1:-1, 1:-1])
-    pygame.display.update()
+    #pygame.surfarray.blit_array(screen, board_c[flag, 1:-1, 1:-1])
+    #pygame.display.update()
     status_print(c_frame_n) if c_frame_n % (required_frames // num_reports) == 0 else None
     c_frame_n += 1
 
 
+screen_raw_buffer = screen.get_buffer()
 c_frame_n = 1
 required_frames = 10000
 num_reports = 20
@@ -115,6 +138,7 @@ time_chunk_start = time.time()
 time_start = time.time()
 done = False
 while not done and not c_frame_n > required_frames:
+# while not done:
     for event in pygame.event.get():
         done = True if event.type == pygame.QUIT else False
         # generate_frame() if event.type == pygame.MOUSEBUTTONDOWN else None
