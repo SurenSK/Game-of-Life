@@ -2904,6 +2904,7 @@ static PyObject *__pyx_pw_15cython_iterator_1iterate(PyObject *__pyx_self, PyObj
 static void __pyx_f_15cython_iterator_iterate(__Pyx_memviewslice __pyx_v_b_, __pyx_t_5numpy_uint8_t __pyx_v_flag, CYTHON_UNUSED int __pyx_skip_dispatch) {
   Py_ssize_t __pyx_v_i;
   Py_ssize_t __pyx_v_j;
+  int __pyx_v_n;
   __Pyx_TraceDeclarations
   __Pyx_RefNannyDeclarations
   __Pyx_memviewslice __pyx_t_1 = { 0, 0, { 0 }, { 0 }, { 0 } };
@@ -2920,7 +2921,7 @@ static void __pyx_f_15cython_iterator_iterate(__Pyx_memviewslice __pyx_v_b_, __p
   int __pyx_t_12;
   int __pyx_t_13;
   Py_ssize_t __pyx_t_14;
-  __pyx_t_5numpy_uint8_t __pyx_t_15;
+  Py_ssize_t __pyx_t_15;
   Py_ssize_t __pyx_t_16;
   Py_ssize_t __pyx_t_17;
   Py_ssize_t __pyx_t_18;
@@ -2944,11 +2945,11 @@ static void __pyx_f_15cython_iterator_iterate(__Pyx_memviewslice __pyx_v_b_, __p
   Py_ssize_t __pyx_t_36;
   Py_ssize_t __pyx_t_37;
   Py_ssize_t __pyx_t_38;
-  Py_ssize_t __pyx_t_39;
-  Py_ssize_t __pyx_t_40;
+  __pyx_t_5numpy_uint8_t __pyx_t_39;
+  __pyx_t_5numpy_uint8_t __pyx_t_40;
   Py_ssize_t __pyx_t_41;
   Py_ssize_t __pyx_t_42;
-  __pyx_t_5numpy_uint8_t __pyx_t_43;
+  Py_ssize_t __pyx_t_43;
   Py_ssize_t __pyx_t_44;
   Py_ssize_t __pyx_t_45;
   Py_ssize_t __pyx_t_46;
@@ -2982,54 +2983,6 @@ static void __pyx_f_15cython_iterator_iterate(__Pyx_memviewslice __pyx_v_b_, __p
   Py_ssize_t __pyx_t_74;
   Py_ssize_t __pyx_t_75;
   Py_ssize_t __pyx_t_76;
-  Py_ssize_t __pyx_t_77;
-  Py_ssize_t __pyx_t_78;
-  Py_ssize_t __pyx_t_79;
-  Py_ssize_t __pyx_t_80;
-  Py_ssize_t __pyx_t_81;
-  Py_ssize_t __pyx_t_82;
-  Py_ssize_t __pyx_t_83;
-  Py_ssize_t __pyx_t_84;
-  Py_ssize_t __pyx_t_85;
-  Py_ssize_t __pyx_t_86;
-  Py_ssize_t __pyx_t_87;
-  Py_ssize_t __pyx_t_88;
-  Py_ssize_t __pyx_t_89;
-  Py_ssize_t __pyx_t_90;
-  Py_ssize_t __pyx_t_91;
-  Py_ssize_t __pyx_t_92;
-  Py_ssize_t __pyx_t_93;
-  Py_ssize_t __pyx_t_94;
-  Py_ssize_t __pyx_t_95;
-  Py_ssize_t __pyx_t_96;
-  Py_ssize_t __pyx_t_97;
-  Py_ssize_t __pyx_t_98;
-  Py_ssize_t __pyx_t_99;
-  Py_ssize_t __pyx_t_100;
-  Py_ssize_t __pyx_t_101;
-  Py_ssize_t __pyx_t_102;
-  Py_ssize_t __pyx_t_103;
-  Py_ssize_t __pyx_t_104;
-  Py_ssize_t __pyx_t_105;
-  Py_ssize_t __pyx_t_106;
-  Py_ssize_t __pyx_t_107;
-  Py_ssize_t __pyx_t_108;
-  Py_ssize_t __pyx_t_109;
-  Py_ssize_t __pyx_t_110;
-  Py_ssize_t __pyx_t_111;
-  Py_ssize_t __pyx_t_112;
-  Py_ssize_t __pyx_t_113;
-  Py_ssize_t __pyx_t_114;
-  Py_ssize_t __pyx_t_115;
-  Py_ssize_t __pyx_t_116;
-  Py_ssize_t __pyx_t_117;
-  Py_ssize_t __pyx_t_118;
-  Py_ssize_t __pyx_t_119;
-  Py_ssize_t __pyx_t_120;
-  Py_ssize_t __pyx_t_121;
-  Py_ssize_t __pyx_t_122;
-  Py_ssize_t __pyx_t_123;
-  Py_ssize_t __pyx_t_124;
   __Pyx_RefNannySetupContext("iterate", 0);
   __Pyx_TraceCall("iterate", __pyx_f[0], 22, 0, __PYX_ERR(0, 22, __pyx_L1_error));
 
@@ -3252,7 +3205,7 @@ if (unlikely(__pyx_memoryview_copy_contents(__pyx_t_3, __pyx_t_6, 2, 2, 0) < 0))
  * 	if flag == 0:
  * 		for i in prange(1, w, nogil=True, schedule='guided', num_threads=12, chunksize=3):             # <<<<<<<<<<<<<<
  * 			for j in range(1, h):
- * 				b_[1, i, j] = b_[0, i, j] if ((b_[0, i-1, j-1] + b_[0, i-1, j] + b_[0, i-1, j+1] + b_[0, i, j-1] + b_[0, i, j+1] + b_[0, i+1, j-1] + b_[0, i+1, j] + b_[0, i+1, j+1]))==2 else 1 if ((b_[0, i-1, j-1] + b_[0, i-1, j] + b_[0, i-1, j+1] + b_[0, i, j-1] + b_[0, i, j+1] + b_[0, i+1, j-1] + b_[0, i+1, j] + b_[0, i+1, j+1]))==3 else 0
+ * 				n = (b_[0, i-1, j-1] + b_[0, i-1, j] + b_[0, i-1, j+1] + b_[0, i, j-1] + b_[0, i, j+1] + b_[0, i+1, j-1] + b_[0, i+1, j] + b_[0, i+1, j+1])
  */
     {
         #ifdef WITH_THREAD
@@ -3275,24 +3228,25 @@ if (unlikely(__pyx_memoryview_copy_contents(__pyx_t_3, __pyx_t_6, 2, 2, 0) < 0))
               if (__pyx_t_10 > 0)
               {
                   #ifdef _OPENMP
-                  #pragma omp parallel num_threads(12) private(__pyx_t_12, __pyx_t_13, __pyx_t_14, __pyx_t_15, __pyx_t_16, __pyx_t_17, __pyx_t_18, __pyx_t_19, __pyx_t_20, __pyx_t_21, __pyx_t_22, __pyx_t_23, __pyx_t_24, __pyx_t_25, __pyx_t_26, __pyx_t_27, __pyx_t_28, __pyx_t_29, __pyx_t_30, __pyx_t_31, __pyx_t_32, __pyx_t_33, __pyx_t_34, __pyx_t_35, __pyx_t_36, __pyx_t_37, __pyx_t_38, __pyx_t_39, __pyx_t_40, __pyx_t_41, __pyx_t_42, __pyx_t_43, __pyx_t_44, __pyx_t_45, __pyx_t_46, __pyx_t_47, __pyx_t_48, __pyx_t_49, __pyx_t_50, __pyx_t_51, __pyx_t_52, __pyx_t_53, __pyx_t_54, __pyx_t_55, __pyx_t_56, __pyx_t_57, __pyx_t_58, __pyx_t_59, __pyx_t_60, __pyx_t_61, __pyx_t_62, __pyx_t_63, __pyx_t_64, __pyx_t_65, __pyx_t_66, __pyx_t_67, __pyx_t_68, __pyx_t_69, __pyx_t_70)
+                  #pragma omp parallel num_threads(12) private(__pyx_t_12, __pyx_t_13, __pyx_t_14, __pyx_t_15, __pyx_t_16, __pyx_t_17, __pyx_t_18, __pyx_t_19, __pyx_t_20, __pyx_t_21, __pyx_t_22, __pyx_t_23, __pyx_t_24, __pyx_t_25, __pyx_t_26, __pyx_t_27, __pyx_t_28, __pyx_t_29, __pyx_t_30, __pyx_t_31, __pyx_t_32, __pyx_t_33, __pyx_t_34, __pyx_t_35, __pyx_t_36, __pyx_t_37, __pyx_t_38, __pyx_t_39, __pyx_t_40, __pyx_t_41, __pyx_t_42, __pyx_t_43, __pyx_t_44, __pyx_t_45, __pyx_t_46)
                   #endif /* _OPENMP */
                   {
                       #ifdef _OPENMP
-                      #pragma omp for firstprivate(__pyx_v_i) lastprivate(__pyx_v_i) lastprivate(__pyx_v_j) schedule(guided, __pyx_t_11)
+                      #pragma omp for firstprivate(__pyx_v_i) lastprivate(__pyx_v_i) lastprivate(__pyx_v_j) lastprivate(__pyx_v_n) schedule(guided, __pyx_t_11)
                       #endif /* _OPENMP */
                       for (__pyx_t_9 = 0; __pyx_t_9 < __pyx_t_10; __pyx_t_9++){
                           {
                               __pyx_v_i = (Py_ssize_t)(1 + 1 * __pyx_t_9);
                               /* Initialize private variables to invalid values */
                               __pyx_v_j = ((Py_ssize_t)0xbad0bad0);
+                              __pyx_v_n = ((int)0xbad0bad0);
 
                               /* "cython_iterator.pyx":34
  * 	if flag == 0:
  * 		for i in prange(1, w, nogil=True, schedule='guided', num_threads=12, chunksize=3):
  * 			for j in range(1, h):             # <<<<<<<<<<<<<<
- * 				b_[1, i, j] = b_[0, i, j] if ((b_[0, i-1, j-1] + b_[0, i-1, j] + b_[0, i-1, j+1] + b_[0, i, j-1] + b_[0, i, j+1] + b_[0, i+1, j-1] + b_[0, i+1, j] + b_[0, i+1, j+1]))==2 else 1 if ((b_[0, i-1, j-1] + b_[0, i-1, j] + b_[0, i-1, j+1] + b_[0, i, j-1] + b_[0, i, j+1] + b_[0, i+1, j-1] + b_[0, i+1, j] + b_[0, i+1, j+1]))==3 else 0
- * 	else:
+ * 				n = (b_[0, i-1, j-1] + b_[0, i-1, j] + b_[0, i-1, j+1] + b_[0, i, j-1] + b_[0, i, j+1] + b_[0, i+1, j-1] + b_[0, i+1, j] + b_[0, i+1, j+1])
+ * 				b_[1, i, j] = 1 if n==3 else b_[0, i, j] if n==2 else 0
  */
                               __pyx_t_12 = __pyx_e_15cython_iterator_h;
                               __pyx_t_13 = __pyx_t_12;
@@ -3302,75 +3256,60 @@ if (unlikely(__pyx_memoryview_copy_contents(__pyx_t_3, __pyx_t_6, 2, 2, 0) < 0))
                                 /* "cython_iterator.pyx":35
  * 		for i in prange(1, w, nogil=True, schedule='guided', num_threads=12, chunksize=3):
  * 			for j in range(1, h):
- * 				b_[1, i, j] = b_[0, i, j] if ((b_[0, i-1, j-1] + b_[0, i-1, j] + b_[0, i-1, j+1] + b_[0, i, j-1] + b_[0, i, j+1] + b_[0, i+1, j-1] + b_[0, i+1, j] + b_[0, i+1, j+1]))==2 else 1 if ((b_[0, i-1, j-1] + b_[0, i-1, j] + b_[0, i-1, j+1] + b_[0, i, j-1] + b_[0, i, j+1] + b_[0, i+1, j-1] + b_[0, i+1, j] + b_[0, i+1, j+1]))==3 else 0             # <<<<<<<<<<<<<<
+ * 				n = (b_[0, i-1, j-1] + b_[0, i-1, j] + b_[0, i-1, j+1] + b_[0, i, j-1] + b_[0, i, j+1] + b_[0, i+1, j-1] + b_[0, i+1, j] + b_[0, i+1, j+1])             # <<<<<<<<<<<<<<
+ * 				b_[1, i, j] = 1 if n==3 else b_[0, i, j] if n==2 else 0
+ * 	else:
+ */
+                                __pyx_t_15 = 0;
+                                __pyx_t_16 = (__pyx_v_i - 1);
+                                __pyx_t_17 = (__pyx_v_j - 1);
+                                __pyx_t_18 = 0;
+                                __pyx_t_19 = (__pyx_v_i - 1);
+                                __pyx_t_20 = __pyx_v_j;
+                                __pyx_t_21 = 0;
+                                __pyx_t_22 = (__pyx_v_i - 1);
+                                __pyx_t_23 = (__pyx_v_j + 1);
+                                __pyx_t_24 = 0;
+                                __pyx_t_25 = __pyx_v_i;
+                                __pyx_t_26 = (__pyx_v_j - 1);
+                                __pyx_t_27 = 0;
+                                __pyx_t_28 = __pyx_v_i;
+                                __pyx_t_29 = (__pyx_v_j + 1);
+                                __pyx_t_30 = 0;
+                                __pyx_t_31 = (__pyx_v_i + 1);
+                                __pyx_t_32 = (__pyx_v_j - 1);
+                                __pyx_t_33 = 0;
+                                __pyx_t_34 = (__pyx_v_i + 1);
+                                __pyx_t_35 = __pyx_v_j;
+                                __pyx_t_36 = 0;
+                                __pyx_t_37 = (__pyx_v_i + 1);
+                                __pyx_t_38 = (__pyx_v_j + 1);
+                                __pyx_v_n = ((((((((*((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_15 * __pyx_v_b_.strides[0]) ) + __pyx_t_16 * __pyx_v_b_.strides[1]) )) + __pyx_t_17)) ))) + (*((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_18 * __pyx_v_b_.strides[0]) ) + __pyx_t_19 * __pyx_v_b_.strides[1]) )) + __pyx_t_20)) )))) + (*((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_21 * __pyx_v_b_.strides[0]) ) + __pyx_t_22 * __pyx_v_b_.strides[1]) )) + __pyx_t_23)) )))) + (*((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_24 * __pyx_v_b_.strides[0]) ) + __pyx_t_25 * __pyx_v_b_.strides[1]) )) + __pyx_t_26)) )))) + (*((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_27 * __pyx_v_b_.strides[0]) ) + __pyx_t_28 * __pyx_v_b_.strides[1]) )) + __pyx_t_29)) )))) + (*((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_30 * __pyx_v_b_.strides[0]) ) + __pyx_t_31 * __pyx_v_b_.strides[1]) )) + __pyx_t_32)) )))) + (*((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_33 * __pyx_v_b_.strides[0]) ) + __pyx_t_34 * __pyx_v_b_.strides[1]) )) + __pyx_t_35)) )))) + (*((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_36 * __pyx_v_b_.strides[0]) ) + __pyx_t_37 * __pyx_v_b_.strides[1]) )) + __pyx_t_38)) ))));
+
+                                /* "cython_iterator.pyx":36
+ * 			for j in range(1, h):
+ * 				n = (b_[0, i-1, j-1] + b_[0, i-1, j] + b_[0, i-1, j+1] + b_[0, i, j-1] + b_[0, i, j+1] + b_[0, i+1, j-1] + b_[0, i+1, j] + b_[0, i+1, j+1])
+ * 				b_[1, i, j] = 1 if n==3 else b_[0, i, j] if n==2 else 0             # <<<<<<<<<<<<<<
  * 	else:
  * 		for i in prange(1, w, nogil=True, schedule='guided', num_threads=12, chunksize=3):
  */
-                                __pyx_t_16 = 0;
-                                __pyx_t_17 = (__pyx_v_i - 1);
-                                __pyx_t_18 = (__pyx_v_j - 1);
-                                __pyx_t_19 = 0;
-                                __pyx_t_20 = (__pyx_v_i - 1);
-                                __pyx_t_21 = __pyx_v_j;
-                                __pyx_t_22 = 0;
-                                __pyx_t_23 = (__pyx_v_i - 1);
-                                __pyx_t_24 = (__pyx_v_j + 1);
-                                __pyx_t_25 = 0;
-                                __pyx_t_26 = __pyx_v_i;
-                                __pyx_t_27 = (__pyx_v_j - 1);
-                                __pyx_t_28 = 0;
-                                __pyx_t_29 = __pyx_v_i;
-                                __pyx_t_30 = (__pyx_v_j + 1);
-                                __pyx_t_31 = 0;
-                                __pyx_t_32 = (__pyx_v_i + 1);
-                                __pyx_t_33 = (__pyx_v_j - 1);
-                                __pyx_t_34 = 0;
-                                __pyx_t_35 = (__pyx_v_i + 1);
-                                __pyx_t_36 = __pyx_v_j;
-                                __pyx_t_37 = 0;
-                                __pyx_t_38 = (__pyx_v_i + 1);
-                                __pyx_t_39 = (__pyx_v_j + 1);
-                                if (((((((((((*((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_16 * __pyx_v_b_.strides[0]) ) + __pyx_t_17 * __pyx_v_b_.strides[1]) )) + __pyx_t_18)) ))) + (*((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_19 * __pyx_v_b_.strides[0]) ) + __pyx_t_20 * __pyx_v_b_.strides[1]) )) + __pyx_t_21)) )))) + (*((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_22 * __pyx_v_b_.strides[0]) ) + __pyx_t_23 * __pyx_v_b_.strides[1]) )) + __pyx_t_24)) )))) + (*((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_25 * __pyx_v_b_.strides[0]) ) + __pyx_t_26 * __pyx_v_b_.strides[1]) )) + __pyx_t_27)) )))) + (*((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_28 * __pyx_v_b_.strides[0]) ) + __pyx_t_29 * __pyx_v_b_.strides[1]) )) + __pyx_t_30)) )))) + (*((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_31 * __pyx_v_b_.strides[0]) ) + __pyx_t_32 * __pyx_v_b_.strides[1]) )) + __pyx_t_33)) )))) + (*((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_34 * __pyx_v_b_.strides[0]) ) + __pyx_t_35 * __pyx_v_b_.strides[1]) )) + __pyx_t_36)) )))) + (*((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_37 * __pyx_v_b_.strides[0]) ) + __pyx_t_38 * __pyx_v_b_.strides[1]) )) + __pyx_t_39)) )))) == 2) != 0)) {
-                                  __pyx_t_40 = 0;
-                                  __pyx_t_41 = __pyx_v_i;
-                                  __pyx_t_42 = __pyx_v_j;
-                                  __pyx_t_15 = (*((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_40 * __pyx_v_b_.strides[0]) ) + __pyx_t_41 * __pyx_v_b_.strides[1]) )) + __pyx_t_42)) )));
+                                if (((__pyx_v_n == 3) != 0)) {
+                                  __pyx_t_39 = 1;
                                 } else {
-                                  __pyx_t_44 = 0;
-                                  __pyx_t_45 = (__pyx_v_i - 1);
-                                  __pyx_t_46 = (__pyx_v_j - 1);
-                                  __pyx_t_47 = 0;
-                                  __pyx_t_48 = (__pyx_v_i - 1);
-                                  __pyx_t_49 = __pyx_v_j;
-                                  __pyx_t_50 = 0;
-                                  __pyx_t_51 = (__pyx_v_i - 1);
-                                  __pyx_t_52 = (__pyx_v_j + 1);
-                                  __pyx_t_53 = 0;
-                                  __pyx_t_54 = __pyx_v_i;
-                                  __pyx_t_55 = (__pyx_v_j - 1);
-                                  __pyx_t_56 = 0;
-                                  __pyx_t_57 = __pyx_v_i;
-                                  __pyx_t_58 = (__pyx_v_j + 1);
-                                  __pyx_t_59 = 0;
-                                  __pyx_t_60 = (__pyx_v_i + 1);
-                                  __pyx_t_61 = (__pyx_v_j - 1);
-                                  __pyx_t_62 = 0;
-                                  __pyx_t_63 = (__pyx_v_i + 1);
-                                  __pyx_t_64 = __pyx_v_j;
-                                  __pyx_t_65 = 0;
-                                  __pyx_t_66 = (__pyx_v_i + 1);
-                                  __pyx_t_67 = (__pyx_v_j + 1);
-                                  if (((((((((((*((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_44 * __pyx_v_b_.strides[0]) ) + __pyx_t_45 * __pyx_v_b_.strides[1]) )) + __pyx_t_46)) ))) + (*((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_47 * __pyx_v_b_.strides[0]) ) + __pyx_t_48 * __pyx_v_b_.strides[1]) )) + __pyx_t_49)) )))) + (*((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_50 * __pyx_v_b_.strides[0]) ) + __pyx_t_51 * __pyx_v_b_.strides[1]) )) + __pyx_t_52)) )))) + (*((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_53 * __pyx_v_b_.strides[0]) ) + __pyx_t_54 * __pyx_v_b_.strides[1]) )) + __pyx_t_55)) )))) + (*((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_56 * __pyx_v_b_.strides[0]) ) + __pyx_t_57 * __pyx_v_b_.strides[1]) )) + __pyx_t_58)) )))) + (*((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_59 * __pyx_v_b_.strides[0]) ) + __pyx_t_60 * __pyx_v_b_.strides[1]) )) + __pyx_t_61)) )))) + (*((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_62 * __pyx_v_b_.strides[0]) ) + __pyx_t_63 * __pyx_v_b_.strides[1]) )) + __pyx_t_64)) )))) + (*((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_65 * __pyx_v_b_.strides[0]) ) + __pyx_t_66 * __pyx_v_b_.strides[1]) )) + __pyx_t_67)) )))) == 3) != 0)) {
-                                    __pyx_t_43 = 1;
+                                  if (((__pyx_v_n == 2) != 0)) {
+                                    __pyx_t_41 = 0;
+                                    __pyx_t_42 = __pyx_v_i;
+                                    __pyx_t_43 = __pyx_v_j;
+                                    __pyx_t_40 = (*((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_41 * __pyx_v_b_.strides[0]) ) + __pyx_t_42 * __pyx_v_b_.strides[1]) )) + __pyx_t_43)) )));
                                   } else {
-                                    __pyx_t_43 = 0;
+                                    __pyx_t_40 = 0;
                                   }
-                                  __pyx_t_15 = __pyx_t_43;
+                                  __pyx_t_39 = __pyx_t_40;
                                 }
-                                __pyx_t_68 = 1;
-                                __pyx_t_69 = __pyx_v_i;
-                                __pyx_t_70 = __pyx_v_j;
-                                *((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_68 * __pyx_v_b_.strides[0]) ) + __pyx_t_69 * __pyx_v_b_.strides[1]) )) + __pyx_t_70)) )) = __pyx_t_15;
+                                __pyx_t_44 = 1;
+                                __pyx_t_45 = __pyx_v_i;
+                                __pyx_t_46 = __pyx_v_j;
+                                *((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_44 * __pyx_v_b_.strides[0]) ) + __pyx_t_45 * __pyx_v_b_.strides[1]) )) + __pyx_t_46)) )) = __pyx_t_39;
                               }
                           }
                       }
@@ -3390,7 +3329,7 @@ if (unlikely(__pyx_memoryview_copy_contents(__pyx_t_3, __pyx_t_6, 2, 2, 0) < 0))
  * 	if flag == 0:
  * 		for i in prange(1, w, nogil=True, schedule='guided', num_threads=12, chunksize=3):             # <<<<<<<<<<<<<<
  * 			for j in range(1, h):
- * 				b_[1, i, j] = b_[0, i, j] if ((b_[0, i-1, j-1] + b_[0, i-1, j] + b_[0, i-1, j+1] + b_[0, i, j-1] + b_[0, i, j+1] + b_[0, i+1, j-1] + b_[0, i+1, j] + b_[0, i+1, j+1]))==2 else 1 if ((b_[0, i-1, j-1] + b_[0, i-1, j] + b_[0, i-1, j+1] + b_[0, i, j-1] + b_[0, i, j+1] + b_[0, i+1, j-1] + b_[0, i+1, j] + b_[0, i+1, j+1]))==3 else 0
+ * 				n = (b_[0, i-1, j-1] + b_[0, i-1, j] + b_[0, i-1, j+1] + b_[0, i, j-1] + b_[0, i, j+1] + b_[0, i+1, j-1] + b_[0, i+1, j] + b_[0, i+1, j+1])
  */
         /*finally:*/ {
           /*normal exit:*/{
@@ -3414,12 +3353,12 @@ if (unlikely(__pyx_memoryview_copy_contents(__pyx_t_3, __pyx_t_6, 2, 2, 0) < 0))
     goto __pyx_L3;
   }
 
-  /* "cython_iterator.pyx":37
- * 				b_[1, i, j] = b_[0, i, j] if ((b_[0, i-1, j-1] + b_[0, i-1, j] + b_[0, i-1, j+1] + b_[0, i, j-1] + b_[0, i, j+1] + b_[0, i+1, j-1] + b_[0, i+1, j] + b_[0, i+1, j+1]))==2 else 1 if ((b_[0, i-1, j-1] + b_[0, i-1, j] + b_[0, i-1, j+1] + b_[0, i, j-1] + b_[0, i, j+1] + b_[0, i+1, j-1] + b_[0, i+1, j] + b_[0, i+1, j+1]))==3 else 0
+  /* "cython_iterator.pyx":38
+ * 				b_[1, i, j] = 1 if n==3 else b_[0, i, j] if n==2 else 0
  * 	else:
  * 		for i in prange(1, w, nogil=True, schedule='guided', num_threads=12, chunksize=3):             # <<<<<<<<<<<<<<
  * 			for j in range(1, h):
- * 				b_[0, i, j] = b_[1, i, j] if ((b_[1, i-1, j-1] + b_[1, i-1, j] + b_[1, i-1, j+1] + b_[1, i, j-1] + b_[1, i, j+1] + b_[1, i+1, j-1] + b_[1, i+1, j] + b_[1, i+1, j+1]))==2 else 1 if ((b_[1, i-1, j-1] + b_[1, i-1, j] + b_[1, i-1, j+1] + b_[1, i, j-1] + b_[1, i, j+1] + b_[1, i+1, j-1] + b_[1, i+1, j] + b_[1, i+1, j+1]))==3 else 0
+ * 				n = (b_[1, i-1, j-1] + b_[1, i-1, j] + b_[1, i-1, j+1] + b_[1, i, j-1] + b_[1, i, j+1] + b_[1, i+1, j-1] + b_[1, i+1, j] + b_[1, i+1, j+1])
  */
   /*else*/ {
     {
@@ -3443,99 +3382,85 @@ if (unlikely(__pyx_memoryview_copy_contents(__pyx_t_3, __pyx_t_6, 2, 2, 0) < 0))
               if (__pyx_t_9 > 0)
               {
                   #ifdef _OPENMP
-                  #pragma omp parallel num_threads(12) private(__pyx_t_100, __pyx_t_101, __pyx_t_102, __pyx_t_103, __pyx_t_104, __pyx_t_105, __pyx_t_106, __pyx_t_107, __pyx_t_108, __pyx_t_109, __pyx_t_110, __pyx_t_111, __pyx_t_112, __pyx_t_113, __pyx_t_114, __pyx_t_115, __pyx_t_116, __pyx_t_117, __pyx_t_118, __pyx_t_119, __pyx_t_12, __pyx_t_120, __pyx_t_121, __pyx_t_122, __pyx_t_123, __pyx_t_124, __pyx_t_13, __pyx_t_14, __pyx_t_15, __pyx_t_43, __pyx_t_71, __pyx_t_72, __pyx_t_73, __pyx_t_74, __pyx_t_75, __pyx_t_76, __pyx_t_77, __pyx_t_78, __pyx_t_79, __pyx_t_80, __pyx_t_81, __pyx_t_82, __pyx_t_83, __pyx_t_84, __pyx_t_85, __pyx_t_86, __pyx_t_87, __pyx_t_88, __pyx_t_89, __pyx_t_90, __pyx_t_91, __pyx_t_92, __pyx_t_93, __pyx_t_94, __pyx_t_95, __pyx_t_96, __pyx_t_97, __pyx_t_98, __pyx_t_99)
+                  #pragma omp parallel num_threads(12) private(__pyx_t_12, __pyx_t_13, __pyx_t_14, __pyx_t_39, __pyx_t_40, __pyx_t_47, __pyx_t_48, __pyx_t_49, __pyx_t_50, __pyx_t_51, __pyx_t_52, __pyx_t_53, __pyx_t_54, __pyx_t_55, __pyx_t_56, __pyx_t_57, __pyx_t_58, __pyx_t_59, __pyx_t_60, __pyx_t_61, __pyx_t_62, __pyx_t_63, __pyx_t_64, __pyx_t_65, __pyx_t_66, __pyx_t_67, __pyx_t_68, __pyx_t_69, __pyx_t_70, __pyx_t_71, __pyx_t_72, __pyx_t_73, __pyx_t_74, __pyx_t_75, __pyx_t_76)
                   #endif /* _OPENMP */
                   {
                       #ifdef _OPENMP
-                      #pragma omp for firstprivate(__pyx_v_i) lastprivate(__pyx_v_i) lastprivate(__pyx_v_j) schedule(guided, __pyx_t_11)
+                      #pragma omp for firstprivate(__pyx_v_i) lastprivate(__pyx_v_i) lastprivate(__pyx_v_j) lastprivate(__pyx_v_n) schedule(guided, __pyx_t_11)
                       #endif /* _OPENMP */
                       for (__pyx_t_10 = 0; __pyx_t_10 < __pyx_t_9; __pyx_t_10++){
                           {
                               __pyx_v_i = (Py_ssize_t)(1 + 1 * __pyx_t_10);
                               /* Initialize private variables to invalid values */
                               __pyx_v_j = ((Py_ssize_t)0xbad0bad0);
+                              __pyx_v_n = ((int)0xbad0bad0);
 
-                              /* "cython_iterator.pyx":38
+                              /* "cython_iterator.pyx":39
  * 	else:
  * 		for i in prange(1, w, nogil=True, schedule='guided', num_threads=12, chunksize=3):
  * 			for j in range(1, h):             # <<<<<<<<<<<<<<
- * 				b_[0, i, j] = b_[1, i, j] if ((b_[1, i-1, j-1] + b_[1, i-1, j] + b_[1, i-1, j+1] + b_[1, i, j-1] + b_[1, i, j+1] + b_[1, i+1, j-1] + b_[1, i+1, j] + b_[1, i+1, j+1]))==2 else 1 if ((b_[1, i-1, j-1] + b_[1, i-1, j] + b_[1, i-1, j+1] + b_[1, i, j-1] + b_[1, i, j+1] + b_[1, i+1, j-1] + b_[1, i+1, j] + b_[1, i+1, j+1]))==3 else 0
+ * 				n = (b_[1, i-1, j-1] + b_[1, i-1, j] + b_[1, i-1, j+1] + b_[1, i, j-1] + b_[1, i, j+1] + b_[1, i+1, j-1] + b_[1, i+1, j] + b_[1, i+1, j+1])
+ * 				b_[0, i, j] = 1 if n==3 else b_[1, i, j] if n==2 else 0
  */
                               __pyx_t_12 = __pyx_e_15cython_iterator_h;
                               __pyx_t_13 = __pyx_t_12;
                               for (__pyx_t_14 = 1; __pyx_t_14 < __pyx_t_13; __pyx_t_14+=1) {
                                 __pyx_v_j = __pyx_t_14;
 
-                                /* "cython_iterator.pyx":39
+                                /* "cython_iterator.pyx":40
  * 		for i in prange(1, w, nogil=True, schedule='guided', num_threads=12, chunksize=3):
  * 			for j in range(1, h):
- * 				b_[0, i, j] = b_[1, i, j] if ((b_[1, i-1, j-1] + b_[1, i-1, j] + b_[1, i-1, j+1] + b_[1, i, j-1] + b_[1, i, j+1] + b_[1, i+1, j-1] + b_[1, i+1, j] + b_[1, i+1, j+1]))==2 else 1 if ((b_[1, i-1, j-1] + b_[1, i-1, j] + b_[1, i-1, j+1] + b_[1, i, j-1] + b_[1, i, j+1] + b_[1, i+1, j-1] + b_[1, i+1, j] + b_[1, i+1, j+1]))==3 else 0             # <<<<<<<<<<<<<<
+ * 				n = (b_[1, i-1, j-1] + b_[1, i-1, j] + b_[1, i-1, j+1] + b_[1, i, j-1] + b_[1, i, j+1] + b_[1, i+1, j-1] + b_[1, i+1, j] + b_[1, i+1, j+1])             # <<<<<<<<<<<<<<
+ * 				b_[0, i, j] = 1 if n==3 else b_[1, i, j] if n==2 else 0
  */
-                                __pyx_t_71 = 1;
-                                __pyx_t_72 = (__pyx_v_i - 1);
-                                __pyx_t_73 = (__pyx_v_j - 1);
-                                __pyx_t_74 = 1;
-                                __pyx_t_75 = (__pyx_v_i - 1);
-                                __pyx_t_76 = __pyx_v_j;
-                                __pyx_t_77 = 1;
-                                __pyx_t_78 = (__pyx_v_i - 1);
-                                __pyx_t_79 = (__pyx_v_j + 1);
-                                __pyx_t_80 = 1;
-                                __pyx_t_81 = __pyx_v_i;
-                                __pyx_t_82 = (__pyx_v_j - 1);
-                                __pyx_t_83 = 1;
-                                __pyx_t_84 = __pyx_v_i;
-                                __pyx_t_85 = (__pyx_v_j + 1);
-                                __pyx_t_86 = 1;
-                                __pyx_t_87 = (__pyx_v_i + 1);
-                                __pyx_t_88 = (__pyx_v_j - 1);
-                                __pyx_t_89 = 1;
-                                __pyx_t_90 = (__pyx_v_i + 1);
-                                __pyx_t_91 = __pyx_v_j;
-                                __pyx_t_92 = 1;
-                                __pyx_t_93 = (__pyx_v_i + 1);
-                                __pyx_t_94 = (__pyx_v_j + 1);
-                                if (((((((((((*((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_71 * __pyx_v_b_.strides[0]) ) + __pyx_t_72 * __pyx_v_b_.strides[1]) )) + __pyx_t_73)) ))) + (*((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_74 * __pyx_v_b_.strides[0]) ) + __pyx_t_75 * __pyx_v_b_.strides[1]) )) + __pyx_t_76)) )))) + (*((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_77 * __pyx_v_b_.strides[0]) ) + __pyx_t_78 * __pyx_v_b_.strides[1]) )) + __pyx_t_79)) )))) + (*((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_80 * __pyx_v_b_.strides[0]) ) + __pyx_t_81 * __pyx_v_b_.strides[1]) )) + __pyx_t_82)) )))) + (*((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_83 * __pyx_v_b_.strides[0]) ) + __pyx_t_84 * __pyx_v_b_.strides[1]) )) + __pyx_t_85)) )))) + (*((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_86 * __pyx_v_b_.strides[0]) ) + __pyx_t_87 * __pyx_v_b_.strides[1]) )) + __pyx_t_88)) )))) + (*((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_89 * __pyx_v_b_.strides[0]) ) + __pyx_t_90 * __pyx_v_b_.strides[1]) )) + __pyx_t_91)) )))) + (*((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_92 * __pyx_v_b_.strides[0]) ) + __pyx_t_93 * __pyx_v_b_.strides[1]) )) + __pyx_t_94)) )))) == 2) != 0)) {
-                                  __pyx_t_95 = 1;
-                                  __pyx_t_96 = __pyx_v_i;
-                                  __pyx_t_97 = __pyx_v_j;
-                                  __pyx_t_15 = (*((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_95 * __pyx_v_b_.strides[0]) ) + __pyx_t_96 * __pyx_v_b_.strides[1]) )) + __pyx_t_97)) )));
+                                __pyx_t_47 = 1;
+                                __pyx_t_48 = (__pyx_v_i - 1);
+                                __pyx_t_49 = (__pyx_v_j - 1);
+                                __pyx_t_50 = 1;
+                                __pyx_t_51 = (__pyx_v_i - 1);
+                                __pyx_t_52 = __pyx_v_j;
+                                __pyx_t_53 = 1;
+                                __pyx_t_54 = (__pyx_v_i - 1);
+                                __pyx_t_55 = (__pyx_v_j + 1);
+                                __pyx_t_56 = 1;
+                                __pyx_t_57 = __pyx_v_i;
+                                __pyx_t_58 = (__pyx_v_j - 1);
+                                __pyx_t_59 = 1;
+                                __pyx_t_60 = __pyx_v_i;
+                                __pyx_t_61 = (__pyx_v_j + 1);
+                                __pyx_t_62 = 1;
+                                __pyx_t_63 = (__pyx_v_i + 1);
+                                __pyx_t_64 = (__pyx_v_j - 1);
+                                __pyx_t_65 = 1;
+                                __pyx_t_66 = (__pyx_v_i + 1);
+                                __pyx_t_67 = __pyx_v_j;
+                                __pyx_t_68 = 1;
+                                __pyx_t_69 = (__pyx_v_i + 1);
+                                __pyx_t_70 = (__pyx_v_j + 1);
+                                __pyx_v_n = ((((((((*((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_47 * __pyx_v_b_.strides[0]) ) + __pyx_t_48 * __pyx_v_b_.strides[1]) )) + __pyx_t_49)) ))) + (*((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_50 * __pyx_v_b_.strides[0]) ) + __pyx_t_51 * __pyx_v_b_.strides[1]) )) + __pyx_t_52)) )))) + (*((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_53 * __pyx_v_b_.strides[0]) ) + __pyx_t_54 * __pyx_v_b_.strides[1]) )) + __pyx_t_55)) )))) + (*((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_56 * __pyx_v_b_.strides[0]) ) + __pyx_t_57 * __pyx_v_b_.strides[1]) )) + __pyx_t_58)) )))) + (*((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_59 * __pyx_v_b_.strides[0]) ) + __pyx_t_60 * __pyx_v_b_.strides[1]) )) + __pyx_t_61)) )))) + (*((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_62 * __pyx_v_b_.strides[0]) ) + __pyx_t_63 * __pyx_v_b_.strides[1]) )) + __pyx_t_64)) )))) + (*((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_65 * __pyx_v_b_.strides[0]) ) + __pyx_t_66 * __pyx_v_b_.strides[1]) )) + __pyx_t_67)) )))) + (*((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_68 * __pyx_v_b_.strides[0]) ) + __pyx_t_69 * __pyx_v_b_.strides[1]) )) + __pyx_t_70)) ))));
+
+                                /* "cython_iterator.pyx":41
+ * 			for j in range(1, h):
+ * 				n = (b_[1, i-1, j-1] + b_[1, i-1, j] + b_[1, i-1, j+1] + b_[1, i, j-1] + b_[1, i, j+1] + b_[1, i+1, j-1] + b_[1, i+1, j] + b_[1, i+1, j+1])
+ * 				b_[0, i, j] = 1 if n==3 else b_[1, i, j] if n==2 else 0             # <<<<<<<<<<<<<<
+ */
+                                if (((__pyx_v_n == 3) != 0)) {
+                                  __pyx_t_39 = 1;
                                 } else {
-                                  __pyx_t_98 = 1;
-                                  __pyx_t_99 = (__pyx_v_i - 1);
-                                  __pyx_t_100 = (__pyx_v_j - 1);
-                                  __pyx_t_101 = 1;
-                                  __pyx_t_102 = (__pyx_v_i - 1);
-                                  __pyx_t_103 = __pyx_v_j;
-                                  __pyx_t_104 = 1;
-                                  __pyx_t_105 = (__pyx_v_i - 1);
-                                  __pyx_t_106 = (__pyx_v_j + 1);
-                                  __pyx_t_107 = 1;
-                                  __pyx_t_108 = __pyx_v_i;
-                                  __pyx_t_109 = (__pyx_v_j - 1);
-                                  __pyx_t_110 = 1;
-                                  __pyx_t_111 = __pyx_v_i;
-                                  __pyx_t_112 = (__pyx_v_j + 1);
-                                  __pyx_t_113 = 1;
-                                  __pyx_t_114 = (__pyx_v_i + 1);
-                                  __pyx_t_115 = (__pyx_v_j - 1);
-                                  __pyx_t_116 = 1;
-                                  __pyx_t_117 = (__pyx_v_i + 1);
-                                  __pyx_t_118 = __pyx_v_j;
-                                  __pyx_t_119 = 1;
-                                  __pyx_t_120 = (__pyx_v_i + 1);
-                                  __pyx_t_121 = (__pyx_v_j + 1);
-                                  if (((((((((((*((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_98 * __pyx_v_b_.strides[0]) ) + __pyx_t_99 * __pyx_v_b_.strides[1]) )) + __pyx_t_100)) ))) + (*((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_101 * __pyx_v_b_.strides[0]) ) + __pyx_t_102 * __pyx_v_b_.strides[1]) )) + __pyx_t_103)) )))) + (*((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_104 * __pyx_v_b_.strides[0]) ) + __pyx_t_105 * __pyx_v_b_.strides[1]) )) + __pyx_t_106)) )))) + (*((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_107 * __pyx_v_b_.strides[0]) ) + __pyx_t_108 * __pyx_v_b_.strides[1]) )) + __pyx_t_109)) )))) + (*((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_110 * __pyx_v_b_.strides[0]) ) + __pyx_t_111 * __pyx_v_b_.strides[1]) )) + __pyx_t_112)) )))) + (*((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_113 * __pyx_v_b_.strides[0]) ) + __pyx_t_114 * __pyx_v_b_.strides[1]) )) + __pyx_t_115)) )))) + (*((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_116 * __pyx_v_b_.strides[0]) ) + __pyx_t_117 * __pyx_v_b_.strides[1]) )) + __pyx_t_118)) )))) + (*((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_119 * __pyx_v_b_.strides[0]) ) + __pyx_t_120 * __pyx_v_b_.strides[1]) )) + __pyx_t_121)) )))) == 3) != 0)) {
-                                    __pyx_t_43 = 1;
+                                  if (((__pyx_v_n == 2) != 0)) {
+                                    __pyx_t_71 = 1;
+                                    __pyx_t_72 = __pyx_v_i;
+                                    __pyx_t_73 = __pyx_v_j;
+                                    __pyx_t_40 = (*((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_71 * __pyx_v_b_.strides[0]) ) + __pyx_t_72 * __pyx_v_b_.strides[1]) )) + __pyx_t_73)) )));
                                   } else {
-                                    __pyx_t_43 = 0;
+                                    __pyx_t_40 = 0;
                                   }
-                                  __pyx_t_15 = __pyx_t_43;
+                                  __pyx_t_39 = __pyx_t_40;
                                 }
-                                __pyx_t_122 = 0;
-                                __pyx_t_123 = __pyx_v_i;
-                                __pyx_t_124 = __pyx_v_j;
-                                *((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_122 * __pyx_v_b_.strides[0]) ) + __pyx_t_123 * __pyx_v_b_.strides[1]) )) + __pyx_t_124)) )) = __pyx_t_15;
+                                __pyx_t_74 = 0;
+                                __pyx_t_75 = __pyx_v_i;
+                                __pyx_t_76 = __pyx_v_j;
+                                *((__pyx_t_5numpy_uint8_t *) ( /* dim=2 */ ((char *) (((__pyx_t_5numpy_uint8_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_b_.data + __pyx_t_74 * __pyx_v_b_.strides[0]) ) + __pyx_t_75 * __pyx_v_b_.strides[1]) )) + __pyx_t_76)) )) = __pyx_t_39;
                               }
                           }
                       }
@@ -3550,12 +3475,12 @@ if (unlikely(__pyx_memoryview_copy_contents(__pyx_t_3, __pyx_t_6, 2, 2, 0) < 0))
           #endif
         }
 
-        /* "cython_iterator.pyx":37
- * 				b_[1, i, j] = b_[0, i, j] if ((b_[0, i-1, j-1] + b_[0, i-1, j] + b_[0, i-1, j+1] + b_[0, i, j-1] + b_[0, i, j+1] + b_[0, i+1, j-1] + b_[0, i+1, j] + b_[0, i+1, j+1]))==2 else 1 if ((b_[0, i-1, j-1] + b_[0, i-1, j] + b_[0, i-1, j+1] + b_[0, i, j-1] + b_[0, i, j+1] + b_[0, i+1, j-1] + b_[0, i+1, j] + b_[0, i+1, j+1]))==3 else 0
+        /* "cython_iterator.pyx":38
+ * 				b_[1, i, j] = 1 if n==3 else b_[0, i, j] if n==2 else 0
  * 	else:
  * 		for i in prange(1, w, nogil=True, schedule='guided', num_threads=12, chunksize=3):             # <<<<<<<<<<<<<<
  * 			for j in range(1, h):
- * 				b_[0, i, j] = b_[1, i, j] if ((b_[1, i-1, j-1] + b_[1, i-1, j] + b_[1, i-1, j+1] + b_[1, i, j-1] + b_[1, i, j+1] + b_[1, i+1, j-1] + b_[1, i+1, j] + b_[1, i+1, j+1]))==2 else 1 if ((b_[1, i-1, j-1] + b_[1, i-1, j] + b_[1, i-1, j+1] + b_[1, i, j-1] + b_[1, i, j+1] + b_[1, i+1, j-1] + b_[1, i+1, j] + b_[1, i+1, j+1]))==3 else 0
+ * 				n = (b_[1, i-1, j-1] + b_[1, i-1, j] + b_[1, i-1, j+1] + b_[1, i, j-1] + b_[1, i, j+1] + b_[1, i+1, j-1] + b_[1, i+1, j] + b_[1, i+1, j+1])
  */
         /*finally:*/ {
           /*normal exit:*/{
