@@ -7,10 +7,12 @@
 # cython: language=3
 from cython.parallel import prange
 from libc.stdio cimport printf
+from libc.stdlib cimport rand, RAND_MAX
 cimport numpy as np
 import numpy as np
 import random
 cimport cython
+import struct
 
 cdef enum:
 	w = 1+10000
@@ -19,7 +21,7 @@ cdef enum:
 	hn = h-1
 
 #1.15ms frametime @ 1920*1080
-cpdef void iterate(np.uint8_t [:, :, ::1] b_, np.uint8_t flag):
+cpdef void iterate_multithread(np.uint8_t [:, :, ::1] b_, np.uint8_t flag):
 	cdef Py_ssize_t i, j
 	cdef int n
 
@@ -85,3 +87,12 @@ cpdef void iterate_pure(np.uint8_t [:, :, ::1] b_, int iterations):
 			for j in range(1, h):
 				n = (b_[1, i-1, j-1] + b_[1, i-1, j] + b_[1, i-1, j+1] + b_[1, i, j-1] + b_[1, i, j+1] + b_[1, i+1, j-1] + b_[1, i+1, j] + b_[1, i+1, j+1])
 				b_[0, i, j] = b_[1, i, j] if n==2 else (1 if n==3 else 0)
+
+cpdef void set_random(np.uint8_t [:, :, ::1] b_, float p):
+	cdef Py_ssize_t i, j
+	cdef int threshold = <int>(RAND_MAX * p)
+
+	for i in prange(1, w, nogil=True, schedule='guided', num_threads=12):
+		for j in range(1, h):
+			b_[0, i, j] = 0 if (<int>rand() < threshold) else 1
+			b_[1, i, j] = 0 if (<int>rand() < threshold) else 1

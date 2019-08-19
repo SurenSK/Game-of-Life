@@ -3,6 +3,7 @@ import timeit
 import pygame
 import numpy as np
 import ctypes
+import sys
 from distutils.core import setup
 from Cython.Build import cythonize
 from distutils.extension import Extension
@@ -30,33 +31,37 @@ TOROIDAL_ENV = True
 P_0 = 0.5
 SCALE = 1
 
+time_pygame_init_start = time.time()
 pygame.init()
 clock = pygame.time.Clock()
 pygame.display.set_caption("Game of Life")
 screen = pygame.display.set_mode((SCREEN_W, SCREEN_H), depth=8)
 screen.set_alpha(None)
 pygame.display.set_palette([OFF_COLOR]+[ON_COLOR]+[GRAY]+[RED]+[GREEN]+[BLUE])
+print("Pygame setup complete... {:.0f}ms".format((time.time() - time_pygame_init_start)*1000))
+
 
 BOARD_W, BOARD_H = (0, 2)[TOROIDAL_ENV] + SCREEN_W // SCALE, (0, 2)[TOROIDAL_ENV] + SCREEN_H // SCALE
 c_board = np.ascontiguousarray(np.empty((2, BOARD_W, BOARD_H), dtype=np.uint8, order='C'))
-for i in range(BOARD_H):
-    c_board[0, :, i] = np.ascontiguousarray(np.random.choice(a=[0, 1], size=(1, BOARD_W), p=[1 - P_0, P_0]), dtype=np.uint8)
-    c_board[1, :, i] = np.ascontiguousarray(np.random.choice(a=[0, 1], size=(1, BOARD_W), p=[1 - P_0, P_0]), dtype=np.uint8)
+time_rand_start = time.time()
+cy.set_random(c_board, P_0)
+print("Randomization complete.. {:.0f}ms".format((time.time() - time_rand_start)*1000))
+# print("\tAlive P_0: {:.1f}%".format(100*np.count_nonzero(c_board)/c_board.size))
+
+count_over_2ms = 0
+
+
+# def ctypes_test():
+#     NUM = 167
+#     fun = ctypes.CDLL("some_c.so")
+#     fun.myFunction.argtypes = [ctypes.c_int]
+#     returnVal = fun.myFunction(NUM)
+#     print(returnVal)
+
 # np_board = np.ascontiguousarray(np.empty((BOARD_W, BOARD_H), dtype=np.uint8, order='C'))
 # for i in range(BOARD_H):
 #     np_board[:, i] = np.ascontiguousarray(np.random.choice(a=[0, 1], size=BOARD_W, p=[1 - P_0, P_0]), dtype=np.uint8)
 # np_count = np.ascontiguousarray(np.zeros(shape=(BOARD_W, BOARD_H), dtype=np.dtype(np.uint8)))
-count_over_2ms = 0
-
-
-def ctypes_test():
-    NUM = 167
-    fun = ctypes.CDLL("some_c.so")
-    fun.myFunction.argtypes = [ctypes.c_int]
-    returnVal = fun.myFunction(NUM)
-    print(returnVal)
-
-
 # def step_toroidal_moore_np():
 #     if TOROIDAL_ENV:
 #         np_board[0, :] = np_board[-2, :]
@@ -137,7 +142,7 @@ def generate_frame():
     # pygame.surfarray.blit_array(screen, c_board[flag, 1:-1, 1:-1])
     # pygame.display.update()
     # step_toroidal_moore_np()
-    cy.iterate(c_board, flag)
+    cy.iterate_multithread(c_board, flag)
     status_print(c_frame) if c_frame % (required_frames // num_reports) == 0 else None
     c_frame += 1
 
@@ -145,18 +150,18 @@ def generate_frame():
 screen_raw_buffer = screen.get_buffer()
 c_frame = 1
 required_frames = 1000
-num_reports = 200
+num_reports = 20
 
 time_init_end = time.time()
-print("Total Initialization...  {:.0f}ms".format(1000 * (time_init_end - time_init_start)))
+print("Total Initialization.... {:.0f}ms".format(1000 * (time_init_end - time_init_start)))
 print("\nCore-loop clock starting...", flush=True)
 time_chunk_start = time.time()
 time_start = time.time()
 
-cy.iterate_pure(c_board, required_frames)
-time_end = time.time()
-print("Avg. {:.2f}FPS".format(required_frames / (time_end - time_start)))
-c_frame += required_frames
+# cy.iterate_pure(c_board, required_frames)
+# time_end = time.time()
+# print("Avg. {:.2f}FPS".format(required_frames / (time_end - time_start)))
+# c_frame += required_frames
 
 done = False
 while not done and not c_frame > required_frames:
