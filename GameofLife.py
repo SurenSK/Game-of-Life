@@ -153,7 +153,7 @@ print("\nCore-loop clock starting...", flush=True)
 time_chunk_start = time.time()
 time_start = time.time()
 
-# cy.iterate_pure(c_board, 1, required_frames)
+# cy.iterate_pure(c_board, required_frames)
 # time_end = time.time()
 # print("Avg. {:.2f}FPS".format(required_frames / (time_end - time_start)))
 
