@@ -6,6 +6,7 @@ import ctypes
 from distutils.core import setup
 from Cython.Build import cythonize
 from distutils.extension import Extension
+import random
 import cProfile
 
 print("Starting init...\n")
@@ -24,7 +25,7 @@ BLACK, GRAY, WHITE = (0, 0, 0), (128, 128, 128), (255, 255, 255)
 
 ON_COLOR = BLACK
 OFF_COLOR = WHITE
-SCREEN_W, SCREEN_H = 1920, 1080
+SCREEN_W, SCREEN_H = 10000, 10000
 TOROIDAL_ENV = True
 P_0 = 0.5
 SCALE = 1
@@ -37,8 +38,14 @@ screen.set_alpha(None)
 pygame.display.set_palette([OFF_COLOR]+[ON_COLOR]+[GRAY]+[RED]+[GREEN]+[BLUE])
 
 BOARD_W, BOARD_H = (0, 2)[TOROIDAL_ENV] + SCREEN_W // SCALE, (0, 2)[TOROIDAL_ENV] + SCREEN_H // SCALE
-c_board = np.ascontiguousarray(np.random.choice(a=[0, 1], size=(2, BOARD_W, BOARD_H), p=[1 - P_0, P_0]), dtype=np.uint8)
-
+c_board = np.ascontiguousarray(np.empty((2, BOARD_W, BOARD_H), dtype=np.uint8, order='C'))
+for i in range(BOARD_H):
+    c_board[0, :, i] = np.ascontiguousarray(np.random.choice(a=[0, 1], size=(1, BOARD_W), p=[1 - P_0, P_0]), dtype=np.uint8)
+    c_board[1, :, i] = np.ascontiguousarray(np.random.choice(a=[0, 1], size=(1, BOARD_W), p=[1 - P_0, P_0]), dtype=np.uint8)
+# np_board = np.ascontiguousarray(np.empty((BOARD_W, BOARD_H), dtype=np.uint8, order='C'))
+# for i in range(BOARD_H):
+#     np_board[:, i] = np.ascontiguousarray(np.random.choice(a=[0, 1], size=BOARD_W, p=[1 - P_0, P_0]), dtype=np.uint8)
+# np_count = np.ascontiguousarray(np.zeros(shape=(BOARD_W, BOARD_H), dtype=np.dtype(np.uint8)))
 count_over_2ms = 0
 
 
@@ -50,23 +57,31 @@ def ctypes_test():
     print(returnVal)
 
 
+# def step_toroidal_moore_np():
+#     if TOROIDAL_ENV:
+#         np_board[0, :] = np_board[-2, :]
+#         np_board[-1, :] = np_board[1, :]
+#         np_board[:, -1] = np_board[:, 1]
+#         np_board[:, 0] = np_board[:, -2]
+#     np_count[:, 1:-1] = np_board[:, :-2] + np_board[:, 2:] + np_board[:, 1:-1]
+#     np_count[1:-1, :] += np_count[:-2, :] + np_count[2:, :]
+#     np_board[np_count != 4] = 0
+#     np_board[np_count == 3] = 1
+
+
 def step_toroidal_moore_cy():
-    #if TOROIDAL_ENV:
-    #    board_0[0, :] = board_0[-2, :]
-    #    board_0[-1, :] = board_0[1, :]
-    #    board_0[:, -1] = board_0[:, 1]
-    #    board_0[:, 0] = board_0[:, -2]
+    if TOROIDAL_ENV:
+        c_board[0, :] = c_board[-2, :]
+        c_board[-1, :] = c_board[1, :]
+        c_board[:, -1] = c_board[:, 1]
+        c_board[:, 0] = c_board[:, -2]
     cy.iterate(c_board, c_frame)
 
 
 def draw_board():
-    # # # Some sort of buffer thing going on, double flipping makes a huge visual difference in fluidity
-    # # Actually its probably just some sort of resonance between simulated FPS and monitor refresh-rate
-    # # In retrospect the improvement in perceived fluidity was probably from the lower FPS no longer being resonant
-    # # # Get screen pixels as arr, xor with disp arr or board or whatever, only draw points that changed?
-    # # Can only manage ~3k pixels with draw rects for the cost of blit_arr(1920*1080)
-    # # Pixelarray would just be even slower than blit_array?
-    # Only if every single pixel is changed?
+    # # Get screen pixels as arr, xor with disp arr or board or whatever, only draw points that changed?
+    # Can only manage ~3k pixels with draw rects for the cost of blit_arr(1920*1080)
+    # Pixelarray would just be even slower than blit_array? Only if every single pixel is changed?
     active_layer = c_frame % 2
     disp_arr = (c_board[active_layer, :, :], c_board[active_layer, 1:-1, 1:-1])[TOROIDAL_ENV]
     pygame.surfarray.blit_array(screen, disp_arr if SCALE == 1 else
@@ -118,23 +133,30 @@ def status_print(frame_n: int) -> None:
 def generate_frame():
     global c_frame
     flag = c_frame % 2
-    cy.iterate_singlethread(c_board, flag)
-    pygame.surfarray.blit_array(screen, c_board[flag, 1:-1, 1:-1])
-    pygame.display.update()
+    # pygame.surfarray.blit_array(screen, np_board[1:-1, 1:-1])
+    # pygame.surfarray.blit_array(screen, c_board[flag, 1:-1, 1:-1])
+    # pygame.display.update()
+    # step_toroidal_moore_np()
+    cy.iterate(c_board, flag)
     status_print(c_frame) if c_frame % (required_frames // num_reports) == 0 else None
     c_frame += 1
 
 
 screen_raw_buffer = screen.get_buffer()
 c_frame = 1
-required_frames = 10000
-num_reports = 20
+required_frames = 1000
+num_reports = 200
 
 time_init_end = time.time()
 print("Total Initialization...  {:.0f}ms".format(1000 * (time_init_end - time_init_start)))
-print("\nCore-loop clock starting...")
+print("\nCore-loop clock starting...", flush=True)
 time_chunk_start = time.time()
 time_start = time.time()
+
+# cy.iterate_pure(c_board, 1, required_frames)
+# time_end = time.time()
+# print("Avg. {:.2f}FPS".format(required_frames / (time_end - time_start)))
+
 done = False
 while not done and not c_frame > required_frames:
 # while not done:
@@ -146,7 +168,7 @@ while not done and not c_frame > required_frames:
 
 c_frame -= 1
 time_end = time.time()
-print("Core-loop clock stopped...\n")
+print("Core-loop clock stopped...\n", flush=True)
 print("Runtime {:.0f}s".format(time_end - time_start))
 print("#Frames ", c_frame)
 print("Avg. {:.2f}ms Frametime".format(1000 * (time_end - time_start) / c_frame))
