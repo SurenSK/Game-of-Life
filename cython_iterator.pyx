@@ -62,7 +62,8 @@ cpdef void iterate_singlethread(np.uint8_t [:, :, ::1] b_, np.uint8_t flag):
 		for i in range(1, w):
 			for j in range(1, h):
 				n = (b_[1, i-1, j-1] + b_[1, i-1, j] + b_[1, i-1, j+1] + b_[1, i, j-1] + b_[1, i, j+1] + b_[1, i+1, j-1] + b_[1, i+1, j] + b_[1, i+1, j+1])
-				b_[0, i, j] = b_[1, i, j] if n==2 else 1 if n==3 else 0
+				#b_[0, i, j] = b_[1, i, j] if n==2 else 1 if n==3 else 0
+				b_[0, i, j] = lut_[b_[0, i, j], n]
 
 cpdef void iterate_pure(np.uint8_t [:, :, ::1] b_, int iterations):
 	cdef Py_ssize_t i, j
