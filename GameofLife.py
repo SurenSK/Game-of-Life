@@ -137,7 +137,6 @@ def status_print(frame_n: int) -> None:
 
 def generate_frame():
     global c_frame
-    flag = c_frame % 2
     # pygame.surfarray.blit_array(screen, np_board[1:-1, 1:-1])
     # pygame.surfarray.blit_array(screen, c_board[flag, 1:-1, 1:-1])
     # pygame.display.update()
@@ -158,6 +157,7 @@ print("\nCore-loop clock starting...", flush=True)
 time_chunk_start = time.time()
 time_start = time.time()
 
+# cy.iterate_pure_singlethread_sepconv(c_board)
 # cy.iterate_pure(c_board, required_frames)
 # time_end = time.time()
 # print("Avg. {:.2f}FPS".format(required_frames / (time_end - time_start)))

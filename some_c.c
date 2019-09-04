@@ -6,25 +6,26 @@
 //C:\Users\kumar\PythonProjects\GameofLife
 
 #define P_0 0.3
-#define BOARD_WIDTH 10000
-#define BOARD_HEIGHT 10000
+#define BOARD_W 10000
+#define BOARD_H 10000
 #define TOROIDAL_ENV 1
 #define THRESHOLD RAND_MAX * P_0
-#define ROW_LEN (BOARD_WIDTH+TOROIDAL_ENV*2)
-#define COL_LEN (BOARD_WIDTH+TOROIDAL_ENV*2)
+#define ROW_LEN (BOARD_W+TOROIDAL_ENV*2)
+#define COL_LEN (BOARD_W+TOROIDAL_ENV*2)
 
 void init_array();
 void disp_array();
 void iter_array();
 
 unsigned short arr[2][COL_LEN][ROW_LEN];
-unsigned short lut[2][10] = {{0,0,0,1,0,0,0,0,0,0},{0,0,0,1,1,0,0,0,0,0}};
+unsigned short lut[10][2] = {{0,0},{0,0},{0,0},{1,1},{0,1},{0,0},{0,0},{0,0},{0,0},{0,0}};
 char* line_break;
 int required_frames = 100;
 
 int main(){
 	printf("Starting...\n");
 	init_array();
+	disp_array();
 	clock_t start = clock();
 	for(int i = 1; i <= required_frames; i++){
 		iter_array();
@@ -39,7 +40,7 @@ void init_array(){
 			arr[0][i][j] = (rand() > THRESHOLD)?0:1;
 		}
 	}
-	int strlen_req = -1+2*BOARD_WIDTH;
+	int strlen_req = -1+2*BOARD_W;
 	line_break = malloc(strlen_req*sizeof(char));
 	line_break[strlen_req] = '\0';
 	for(int i = 0; i < strlen_req; i++){
@@ -79,7 +80,7 @@ void iter_array(){
 	}
 	for(int i = 1; i < COL_LEN-1; i++){
 		for(int j = 1; j < ROW_LEN-1; j++){
-			arr[0][i][j] = lut[arr[0][i][j]][arr[1][i-1][j] + arr[1][i][j] + arr[1][i+1][j]];
+			arr[0][i][j] = lut[arr[1][i-1][j] + arr[1][i][j] + arr[1][i+1][j]][arr[0][i][j]];
 		}
 	}
 }
